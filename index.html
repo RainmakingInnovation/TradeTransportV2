@@ -4,6 +4,7 @@
     <meta charset="utf-8" />
     <title>Dashboard</title>
     <script src="https://d3js.org/d3.v5.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/spin.js/2.0.1/spin.min.js"></script>
     <script src="https://cdn.rawgit.com/eligrey/canvas-toBlob.js/f1a01896135ab378aa5c0118eadd81da55e698d8/canvas-toBlob.js"></script>
     <script src="https://cdn.rawgit.com/eligrey/FileSaver.js/e9d941381475b5df8b7d7691013401e171014e89/FileSaver.min.js"></script>
         <script
@@ -243,7 +244,7 @@
       .dropdown-industry {
         margin: auto;
         position: relative;
-        display: inline-block;
+        display: none;
         text-anchor: middle;
       }
 
@@ -315,6 +316,7 @@
       #map-button,
       #save-button {
         background-color: #787878;
+        display: none;
       }
 
       #map-button:hover,
@@ -451,6 +453,10 @@
         background-color: #ebf7fc;
         transition: 0.8s ease all;
         z-index: 1;
+      }
+
+      #button-16 {
+        display: none;
       }
 
       #button-16 .knobs:before {
@@ -1319,6 +1325,24 @@
           bar_height = 460,
           popupMode = {"page": "none", "type": "none"};
 
+            // loader settings
+          var opts = {
+            lines: 9, // The number of lines to draw
+            length: 9, // The length of each line
+            width: 10, // The line thickness
+            top: "57%",
+            left: "38.5%",
+            radius: 30, // The radius of the inner circle
+            color: "black", // #rgb or #rrggbb or array of colors
+            speed: 1.9, // Rounds per second
+            trail: 40, // Afterglow percentage
+            className: "spinner" // The CSS class to assign to the spinner
+          };
+
+          var target = document.getElementById("chart-container");
+
+          var spinner = new Spinner(opts).spin(target);
+
           d3.select("#radar-toggle-btn").attr("class", "left-sidebar-btn active")
           d3.select(".popup-bg").style("display", "none")
 
@@ -1452,23 +1476,28 @@
         //CHANGE HERE:
         var themeOrder = [
         "Fuel & Efficiency",
-"infrastructure, vessel & Asset efficiency",
-"CO2 Transparency",
-"Data & AI",
-"Business Model Innovation",
-"Carbon CS, offsetting & trading",
-]
+        "infrastructure, vessel & Asset efficiency",
+        "CO2 Transparency",
+        "Data & AI",
+        "Business Model Innovation",
+        "Carbon CS, offsetting & trading",
+        ]
   
         d3.csv(
           "https://docs.google.com/spreadsheets/d/e/2PACX-1vSafGm_gSEK_M6dTEcS3sd2N7CcehHPfg561BJtgzrHClIt5DH79yqHI1LpeOLbbwGob_Xi0kVUdxMB/pub?gid=1007226164&single=true&output=csv"
         ).then(function(data) {
-          console.log(data)
           d3.csv(
             "https://docs.google.com/spreadsheets/d/e/2PACX-1vSafGm_gSEK_M6dTEcS3sd2N7CcehHPfg561BJtgzrHClIt5DH79yqHI1LpeOLbbwGob_Xi0kVUdxMB/pub?gid=1034085981&single=true&output=csv"
           ).then(function(desc) {
 
             d3.csv("https://docs.google.com/spreadsheets/d/e/2PACX-1vSafGm_gSEK_M6dTEcS3sd2N7CcehHPfg561BJtgzrHClIt5DH79yqHI1LpeOLbbwGob_Xi0kVUdxMB/pub?gid=106432015&single=true&output=csv"
             ).then(function(hero_data) { 
+
+              spinner.stop();
+
+              d3.select("#button-16").style("display", "block")
+              d3.select(".dropdown-industry").style("display", "inline-block")
+              d3.select("#save-button").style("display", "block")
 
               
   
