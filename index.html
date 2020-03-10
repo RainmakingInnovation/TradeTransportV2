@@ -660,8 +660,6 @@
             vertical-align: middle;
             text-align: center;
             text-anchor: middle;
-            
-
       }
 
       .left-sidebar-header {
@@ -1430,7 +1428,8 @@
           .append("text")
           .attr("class", "chart-title")
           .text("Singapore Decarbonisation Programme 2020")
-          .attr("y", (-height * 4.55) / 10);
+          .attr("y", (-height * 4.55) / 10)
+          .style("display", "none")
   
         var leftProjection = d3
           .geoMercator()
@@ -1521,6 +1520,7 @@
               d3.select("#button-16").style("display", "block")
               d3.select(".dropdown-industry").style("display", "inline-block")
               d3.select("#save-button").style("display", "block")
+              d3.select(".chart-title").style("display", "")
 
               
   
