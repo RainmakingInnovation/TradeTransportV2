@@ -937,29 +937,29 @@
   .hero-startup-logo-container {
     display:table-cell;
     padding: 5px;
-    width:140px;
-    height:140px;
+        padding-top: 0px;
+        padding-bottom: 0px;
+        max-width: 140px;
     text-align: center; 
     vertical-align: middle;
   }
 
   .hero-startup-logo {
       margin: auto;
-   width: 100px;
-
+    width: 110px;
   }
 
   .hero-startup-desc {
-    float:  left;
-    width: 50%;
+        float: left;
+        width: 60%;
     font-family: "Graphik Regular";
     font-size: 12px;
     padding: 5px;
   }
 
   .hero-startup-stats {
-    float:  left;
-    width: 20%;
+        float: left;
+        width: 25%;
     font-family: "Graphik Regular";
     font-size: 12px;
     padding: 5px;
@@ -1110,7 +1110,7 @@
               <div class="svg-container">
               </div>
                 <div class="opportunity-space-title">
-                  Opportunity space
+                  Opportunity Space
                 </div>
               <div class="opportunity-space-description">
                 New, greener cement formulations that reduce carbon through replacing traditional clinker
@@ -1162,71 +1162,89 @@
             </div>
             <div class="column right">
               <div class="right-title">Hero Startups</div>
-              <div id="hs-0" class="hero-startup">
-                <div class="hero-startup-container">
-                    <div class="fl">
-                  <div id="hs-logo-container-0" class="hero-startup-logo-container">
-                    <img id="hs-logo-0" class="hero-startup-logo" src="">
-                  </div>
-                </div>
-                 <div id="hs-desc-0" class="hero-startup-desc">
-                    <div id="hs-ov-0" class="hero-startup-desc-overview"></div>
-                    <div id="hs-prb-0" class="hero-startup-desc-problem"></div>
-                    <div id="hs-sln-0" class="hero-startup-desc-solution"></div>
-                  </div>
-                  <div class="hero-startup-stats">
-                    <div id="hs-website-0" class="hero-startup-stats-website"></div>
-                    <div id="hs-location-0" class="hero-startup-stats-location"></div>
-                    <div id="hs-round-0" class="hero-startup-stats-round"></div>
-                    <div id="hs-amount-0" class="hero-startup-stats-amount"></div>
-                    <div id="hs-year-0" class="hero-startup-stats-year"></div>
-                  </div>
-                </div>
-              </div>
-              <div id="hs-1" class="hero-startup">
-                <div class="hero-startup-container">
-                    <div class="fl">
-                  <div id="hs-logo-container-1" class="hero-startup-logo-container">
-                    <img id="hs-logo-1" class="hero-startup-logo" src="">
-                  </div>
-                </div>
-                  <div id="hs-desc-1" class="hero-startup-desc">
-                    <div id="hs-ov-1" class="hero-startup-desc-overview"></div>
-                    <div id="hs-prb-1" class="hero-startup-desc-problem"></div>
-                    <div id="hs-sln-1" class="hero-startup-desc-solution"></div>
-                  </div>
-                  <div class="hero-startup-stats">
-                    <div id="hs-website-1" class="hero-startup-stats-website"></div>
-                    <div id="hs-location-1" class="hero-startup-stats-location"></div>
-                    <div id="hs-round-1" class="hero-startup-stats-round"></div>
-                    <div id="hs-amount-1" class="hero-startup-stats-amount"></div>
-                    <div id="hs-year-1" class="hero-startup-stats-year"></div>
-                  </div>
-                </div>
-              </div>
-              <div id="hs-2" class="hero-startup">
-                <div class="hero-startup-container">
-                    <div class="fl">
-                  <div id="hs-logo-container-2" class="hero-startup-logo-container">
-                    <img id="hs-logo-2" class="hero-startup-logo" src="">
-                  </div>
-                </div>
-                  <div id="hs-desc-2" class="hero-startup-desc">
-                    <div id="hs-ov-2" class="hero-startup-desc-overview"></div>
-                    <div id="hs-prb-2" class="hero-startup-desc-problem"></div>
-                    <div id="hs-sln-2" class="hero-startup-desc-solution"></div>
-                  </div>
-                  <div class="hero-startup-stats">
-                    <div id="hs-website-2" class="hero-startup-stats-website"></div>
-                    <div id="hs-location-2" class="hero-startup-stats-location"></div>
-                    <div id="hs-round-2" class="hero-startup-stats-round"></div>
-                    <div id="hs-amount-2" class="hero-startup-stats-amount"></div>
-                    <div id="hs-year-2" class="hero-startup-stats-year"></div>
-                  </div>
-                </div>
-              </div>
+           <table>
+              <tr id="hs-0" class="hero-startup-container">
+                <td
+                  id="hs-logo-container-0"
+                  class="hero-startup-logo-container"
+                >
+                  <img id="hs-logo-0" class="hero-startup-logo" src="" />
+                </td>
+                <td id="hs-desc-0" class="hero-startup-desc">
+                  <div id="hs-ov-0" class="hero-startup-desc-overview"></div>
+                  <div id="hs-prb-0" class="hero-startup-desc-problem"></div>
+                  <div id="hs-sln-0" class="hero-startup-desc-solution"></div>
+                </td>
+                <td class="hero-startup-stats">
+                  <div
+                    id="hs-website-0"
+                    class="hero-startup-stats-website"
+                  ></div>
+                  <div
+                    id="hs-location-0"
+                    class="hero-startup-stats-location"
+                  ></div>
+                  <div id="hs-round-0" class="hero-startup-stats-round"></div>
+                  <div id="hs-amount-0" class="hero-startup-stats-amount"></div>
+                  <div id="hs-year-0" class="hero-startup-stats-year"></div>
+                </td>
+              </tr>
+
+              <tr id="hs-1" class="hero-startup-container">
+                <td
+                  id="hs-logo-container-1"
+                  class="hero-startup-logo-container"
+                >
+                  <img id="hs-logo-1" class="hero-startup-logo" src="" />
+                </td>
+                <td id="hs-desc-1" class="hero-startup-desc">
+                  <div id="hs-ov-1" class="hero-startup-desc-overview"></div>
+                  <div id="hs-prb-1" class="hero-startup-desc-problem"></div>
+                  <div id="hs-sln-1" class="hero-startup-desc-solution"></div>
+                </td>
+                <td class="hero-startup-stats">
+                  <div
+                    id="hs-website-1"
+                    class="hero-startup-stats-website"
+                  ></div>
+                  <div
+                    id="hs-location-1"
+                    class="hero-startup-stats-location"
+                  ></div>
+                  <div id="hs-round-1" class="hero-startup-stats-round"></div>
+                  <div id="hs-amount-1" class="hero-startup-stats-amount"></div>
+                  <div id="hs-year-1" class="hero-startup-stats-year"></div>
+                </td>
+              </tr>
+
+              <tr id="hs-2" class="hero-startup-container">
+                <td
+                  id="hs-logo-container-2"
+                  class="hero-startup-logo-container"
+                >
+                  <img id="hs-logo-2" class="hero-startup-logo" src="" />
+                </td>
+                <td id="hs-desc-2" class="hero-startup-desc">
+                  <div id="hs-ov-2" class="hero-startup-desc-overview"></div>
+                  <div id="hs-prb-2" class="hero-startup-desc-problem"></div>
+                  <div id="hs-sln-2" class="hero-startup-desc-solution"></div>
+                </td>
+                <td class="hero-startup-stats">
+                  <div
+                    id="hs-website-2"
+                    class="hero-startup-stats-website"
+                  ></div>
+                  <div
+                    id="hs-location-2"
+                    class="hero-startup-stats-location"
+                  ></div>
+                  <div id="hs-round-2" class="hero-startup-stats-round"></div>
+                  <div id="hs-amount-2" class="hero-startup-stats-amount"></div>
+                  <div id="hs-year-2" class="hero-startup-stats-year"></div>
+                </td>
+              </tr>
+            </table>
             </div>
-            
           </div>
           <div class="popup-section-b">
               <div class="bar-chart-title">Bar Chart</div>
