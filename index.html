@@ -622,7 +622,8 @@
         max-height: 300px;
         overflow: scroll;
         font-family: "Graphik Regular";
-        background-color: white;
+        background-color: black;
+        color: white;
         border: 1px solid #787878;
         padding: 10px;
       }
@@ -634,6 +635,10 @@
 
       .startup-table td {
         min-width: 60px;
+      }
+
+      .startup-table td > a {
+        color: white;
       }
 
       .table-header {
@@ -1328,12 +1333,12 @@
             // loader settings
           var opts = {
             lines: 9, // The number of lines to draw
-            length: 9, // The length of each line
-            width: 10, // The line thickness
+            length: 7, // The length of each line
+            width: 8, // The line thickness
+            radius: 24, // The radius of the inner circle
             top: "57%",
             left: "38.5%",
-            radius: 30, // The radius of the inner circle
-            color: "black", // #rgb or #rrggbb or array of colors
+            color: "#132A54", // #rgb or #rrggbb or array of colors
             speed: 1.9, // Rounds per second
             trail: 40, // Afterglow percentage
             className: "spinner" // The CSS class to assign to the spinner
@@ -1406,7 +1411,7 @@
         var chartTitle = chartSVG
           .append("text")
           .attr("class", "chart-title")
-          .text("Trade & Transport V2")
+          .text("Singapore Decarbonisation Programme 2020")
           .attr("y", (-height * 4.55) / 10);
   
         var leftProjection = d3
