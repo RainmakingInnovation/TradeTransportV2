@@ -1474,7 +1474,7 @@
         "crew incentivisation",
         "drones",
         "energy & equipment management",
-        "in-Port vessel time reduction",
+        "in-port vessel time reduction",
         "vessel flow efficiency", 
         "blockchain for co2 provenance",
         "co2 labelling",
@@ -2075,7 +2075,9 @@
                       }
                   })
                   console.log(heroPopupData)
+                  var extra = [0, 1, 2]
                   heroPopupData.forEach(function(v, i) {
+                    extra = extra.splice(1)
                       if (v.Name !== "COMPETITOR") {
                         d3.select("#hs-" + i).style("display", "")
 
@@ -2125,6 +2127,10 @@
                           d3.select("#hs-" + i).style("display", "none")
                       }
                   })
+                  extra.forEach(function(v) {
+                    d3.select("#hs-" + v).style("display", "none")
+                  })
+
 
                   d3.select(".analysis-btn").on("click", function() {
                     d3.select(".popup-container").attr("class", "popup-container added")
