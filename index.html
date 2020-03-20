@@ -89,11 +89,27 @@
         stroke-width: 2px;
       }
 
+      .opp-space-label-text {
+        fill: white;
+        text-anchor: middle;
+        font-weight: bold;
+        font-size: 6px;
+        font-family: "Graphik Bold";
+      }
+
       .label-text {
         fill: white;
         text-anchor: middle;
         font-weight: bold;
         font-size: 6px;
+        font-family: "Graphik Bold";
+      }
+
+      .theme-label-text {
+        fill: white;
+        text-anchor: middle;
+        font-weight: bold;
+        font-size: 10px;
         font-family: "Graphik Bold";
       }
 
@@ -460,7 +476,7 @@
       }
 
       #button-16 .knobs:before {
-        content: "Year";
+        content: "Maturity";
         position: absolute;
         top: 4px;
         left: 4px;
@@ -520,7 +536,7 @@
       }
 
       #button-16 .checkbox:checked + .knobs:before {
-        content: "Maturity";
+        content: "Year";
         left: 46px;
         background-color: #ea3b66;
       }
@@ -1087,6 +1103,77 @@
     shape-rendering: crispEdges;
   }
 
+  .node-tooltip {
+    position: fixed;
+    z-index: 999;
+    left: 0;
+    top: 0;
+    padding: 0.5em 1em;
+    background: rgba(255, 255, 255, 1.0);
+    pointer-events: none;
+    opacity: 0;
+    text-align: left;
+    text-anchor: start;
+    max-width: 400px;
+    font-size: 10px;
+    box-shadow: 0 4px 12px 0px rgba(0,0,0,.25);
+    
+  }
+
+  .node-tooltip-title {
+    font-family: "Graphik Bold";
+    padding-top: 3px;
+    padding-bottom: 5px;
+  }
+
+  .node-tooltip-funding {
+    font-family: "Graphik Regular";
+    padding-bottom: 3px;
+  }
+
+  .node-tooltip-description {
+    font-family: "Graphik Regular";
+    padding-bottom: 3px;
+  }
+
+  #opp-space-tooltip-container {
+    grid-column: 4 / span 1;
+    grid-row: 2 / span 2;
+    display: none;
+  }
+
+  .opp-space-tooltip {
+    padding: 0.5em 1em;
+    background: rgba(255, 255, 255, 1.0);
+    text-align: left;
+    text-anchor: start;
+    max-width: 400px;
+    font-size: 10px;
+    box-shadow: 0 4px 12px 0px rgba(0,0,0,.25);
+  }
+
+  .opp-space-tooltip-title {
+    font-family: "Graphik Bold";
+    padding-top: 3px;
+    padding-bottom: 5px;
+  }
+
+  .opp-space-tooltip-sub-heading {
+    font-family: "Graphik Regular";
+    padding-bottom: 3px;
+  }
+
+  .opp-space-tooltip-item {
+    font-family: "Graphik Regular";
+    padding-bottom: 5px;
+  }
+
+
+
+  .bold {
+    font-family: "Graphik Bold";
+    padding-top: 5px;
+  }
 
     </style>
 
@@ -1134,27 +1221,6 @@
                   </div>
                   <div class="opp-space-summary-column column-desc">Avg Founded Year + Maturity: </div>
                   <div id="avg-funding-year" class="opp-space-summary-column column-value"></div>
-                </div>
-                <div class="opportunity-space-summary-row">
-                  <div class="opp-space-summary-column column-icon">
-                    <i class="fas fa-compass"></i>
-                  </div>
-                  <div class="opp-space-summary-column column-desc">Most Active Competitor: </div>
-                  <div id="most-active-competitor" class="opp-space-summary-column column-value"></div>
-                </div>
-                <div class="opportunity-space-summary-row">
-                  <div class="opp-space-summary-column column-icon">
-                    <i class="fas fa-cogs"></i>
-                  </div>
-                  <div class="opp-space-summary-column column-desc">Popular Technology + Business Model: </div>
-                  <div id="most-pop-tech" class="opp-space-summary-column column-value"></div>
-                </div>
-                <div class="opportunity-space-summary-row">
-                  <div class="opp-space-summary-column column-icon">
-                    <i class="fas fa-cubes"></i>
-                  </div>
-                  <div class="opp-space-summary-column column-desc">Pattern Recognised: </div>
-                  <div id="pattern-recognized" class="opp-space-summary-column column-value"></div>
                 </div>
               </div>
             </div>
@@ -1281,6 +1347,20 @@
     </div>
 
     <div id="hover-info-container"></div>
+  <div id="opp-space-tooltip-container">
+      <div class="opp-space-tooltip">
+      <div class="opp-space-tooltip-title"></div>
+      <div id="ostt-1" class="opp-space-tooltip-item"></div>
+      <div id="ostt-2" class="opp-space-tooltip-sub-heading">Total Funding:</div>
+      <div id="ostt-3" class="opp-space-tooltip-item"></div>
+      <div id="ostt-4" class="opp-space-tooltip-sub-heading">Total Number of Startups:</div>
+      <div id="ostt-5" class="opp-space-tooltip-item"></div>
+      <div id="ostt-6" class="opp-space-tooltip-sub-heading">Average Funding:</div>
+      <div id="ostt-7" class="opp-space-tooltip-item"></div>
+      <div id="ostt-8" class="opp-space-tooltip-item bold"></div>
+      <div id="ostt-9" class="opp-space-tooltip-item"></div>
+    </div>
+  </div>
     <div class="map-container">
       <div class="sidebar">
         <div class="sidebar-title"></div>
@@ -1293,6 +1373,11 @@
 </div>
     <div id="chart-container"></div>
     <div id="key-container"></div>
+    <div class="node-tooltip">
+      <div class="node-tooltip-title"></div>
+      <div class="node-tooltip-funding"></div>
+      <div class="node-tooltip-description"></div>
+    </div>
     <div id="control-container">
       <div>
           <div>
@@ -1315,8 +1400,11 @@
             <button class="switch-button" id="save-button">Save Image</button>
           </div>
         </div>
+        
       </div>
+      
     </div>
+
     <div id="tmp-container"></div>
 
 
@@ -1328,7 +1416,7 @@
           outerRadius = 300,
           keySize = 10,
           keySpacing = 10,
-          radial = "year",
+          radial = "maturity",
           animationDuration = 2000,
           keyWidth = 160,
           keyHeight = 260,
@@ -1344,7 +1432,30 @@
           leftHeight = 650,
           bar_width = 900,
           bar_height = 460,
-          popupMode = {"page": "none", "type": "none"};
+          popupMode = {"page": "none", "type": "none"},
+          indexTracker = {},
+          indexTrackerYear = {};
+
+    var categoryFontObject = [
+      { name: 'themeFont',
+        dy_upper: "-1.15em",
+        dy_lower: "1.85em"
+      },
+      {
+        fontSize: "30px",
+        letterSpacing: "5px",
+        letterSpaceVal: 5,
+        dy_upper: "-1.05em",
+        dy_lower: "1.8em"
+      },
+      {
+        fontSize: "24px",
+        letterSpacing: "4px",
+        letterSpaceVal: 4,
+        dy_upper: "-1.25em",
+        dy_lower: "2em"
+      }
+    ];
 
             // loader settings
           var opts = {
@@ -1366,31 +1477,6 @@
 
           d3.select("#radar-toggle-btn").attr("class", "left-sidebar-btn active")
           d3.select(".popup-bg").style("display", "none")
-
-  
-        /* d3.select("#switch-button-maturity").style("background-color", "#5FBDFB")
-          .on("mouseover", function () {
-            d3.select(this).style("background-color", "#EA3B66")
-          })
-          .on("mouseout", function () {
-            if (radial === 'maturity') {
-              d3.select(this).style("background-color", "#5FBDFB")
-            } else {
-              d3.select(this).style("background-color", "#8e8e8e")
-            }
-          })
-  
-        d3.select("#switch-button-year").style("background-color", "#8e8e8e")
-          .on("mouseover", function () {
-            d3.select(this).style("background-color", "#EA3B66")
-          })
-          .on("mouseout", function () {
-            if (radial === 'year') {
-              d3.select(this).style("background-color", "#5FBDFB")
-            } else {
-              d3.select(this).style("background-color", "#8e8e8e")
-            }
-          }) */
   
         var svg = d3
           .select("#chart-container")
@@ -1464,47 +1550,6 @@
           .attr("y", -titleLogoHeight / 2)
           .attr("x", -titleLogoWidth / 2); 
   
-        //CHANGE HERE:
-        var focusAreaOrder = [
-        "fuel additives",
-        "new vessel design",
-        "energy efficiency & storage",
-        "new fuel types",
-        "alternative energy",
-        "crew incentivisation",
-        "drones",
-        "energy & equipment management",
-        "in-port vessel time reduction",
-        "vessel flow efficiency", 
-        "blockchain for co2 provenance",
-        "co2 labelling",
-        "co2 tracking", 
-        "5g connectivity", 
-        "port-side analytics", 
-        "demand & supply prediction", 
-        "digital twin", 
-        "fleet utilization", 
-        "co2 reduction monetization in other industries", 
-        "freight orchestration", 
-        "green freight", 
-        "switching transport mode", 
-        "carbon capture & storage", 
-        "co2 trading/offsetting/exchange", 
-        "co2 upcycling"
-      ];
-
-
-  
-        //CHANGE HERE:
-        var themeOrder = [
-        "Fuel & Efficiency",
-        "infrastructure, vessel & Asset efficiency",
-        "CO2 Transparency",
-        "Data & AI",
-        "Business Model Innovation",
-        "Carbon CS, offsetting & trading",
-        ]
-  
         d3.csv(
           "https://docs.google.com/spreadsheets/d/e/2PACX-1vSafGm_gSEK_M6dTEcS3sd2N7CcehHPfg561BJtgzrHClIt5DH79yqHI1LpeOLbbwGob_Xi0kVUdxMB/pub?gid=1007226164&single=true&output=csv"
         ).then(function(data) {
@@ -1515,20 +1560,63 @@
             d3.csv("https://docs.google.com/spreadsheets/d/e/2PACX-1vSafGm_gSEK_M6dTEcS3sd2N7CcehHPfg561BJtgzrHClIt5DH79yqHI1LpeOLbbwGob_Xi0kVUdxMB/pub?gid=106432015&single=true&output=csv"
             ).then(function(hero_data) { 
 
-              spinner.stop();
+              
 
+
+              spinner.stop();
               d3.select("#button-16").style("display", "block")
               d3.select(".dropdown-industry").style("display", "inline-block")
               d3.select("#save-button").style("display", "block")
               d3.select(".chart-title").style("display", "")
 
-              
-  
               d3.json("assets/world_countries.json").then(function(json) {
 
-                
+              
+
+              var focusAreaOrder = desc.map(function(d) {
+                return d["Opportunity Space"].toLowerCase()
+              });
+
+              var themeOrder = [... new Set(desc.map(function(d) {
+                return d["Themes"]
+              }))]
+
+              // Filter data for startups noot in description:
+              new_data = []
+              data.forEach(function(d) {
+                d["Opportunity space"] = d["Opportunity space"].toLowerCase()
+                if (d["Opportunity space"] === "") {
+                  console.log('ERROR, blank Opportunity Space Entry:', d)
+                }
+                if (d["Founded"] === "") {
+                  console.log('ERROR, blank Founded Entry:', d)
+                }
+                if (d["Maturity"] === "") {
+                  console.log('ERROR, blank Maturity Entry:', d)
+                }
+                if (focusAreaOrder.indexOf(d["Opportunity space"]) < 0) {
+                  console.log('ERROR, bad Opportunity Space Entry:', d)
+                } else {
+                  new_data.push(d)
+                }
+              })
+
+              data = new_data
+
+            data = data.filter(function(d) {
+              return d["Opportunity space"] !== "";
+            });
   
-  
+            data = data.filter(function(d) {
+              return d["Founded"] !== "";
+            });
+
+             data = data.filter(function(d) {
+              return d["Maturity"] !== "";
+            });
+
+
+            
               json.features.push({"type": "features", "properties": {"name": "Singapore"}, "geometry": {"type": "Polygon", "coordinates": [[0, 0]]}})
               json.features.push({"type": "features", "properties": {"name": "Bahrain"}, "geometry": {"type": "Polygon", "coordinates": [[0, 0]]}})
   
@@ -1769,7 +1857,7 @@
                               .append("path")
                               .style("fill-opacity", 1)
                               .attr("class", function(d) {
-                                //console.log(d)
+     
                                 return (
                                   "existing-segments segment-" +
                                   d.data.value.key.replace(/ /g, "-").replace(/&/g, "and")
@@ -2074,7 +2162,7 @@
                         heroPopupData.push(v)
                       }
                   })
-                  console.log(heroPopupData)
+
                   var extra = [0, 1, 2]
                   heroPopupData.forEach(function(v, i) {
                     extra = extra.splice(1)
@@ -2220,12 +2308,7 @@
                 })
                 .entries(json.features);
 
-                console.log('json_country', json_country)
-  
-                
-  
               data.forEach(function(v) {
-                //console.log(v["Country"]);
                 json.features.forEach(function(w) {
                   if (v["Country"] === w.properties.name) {
                     v.json_country = w.properties.name;
@@ -2291,13 +2374,7 @@
               // END::END
   
   
-            data = data.filter(function(d) {
-              return d["Opportunity space"] !== "";
-            });
-  
-            data = data.filter(function(d) {
-              return d["Founded"] !== "";
-            });
+
   
   
             // correct formatting of total funding values to numbers
@@ -2323,9 +2400,6 @@
                   d["Themes"] = v["Themes"];
                   d["Theme Definition"] = v["Theme Definition"];
                   d["Opportunity space Description"] = v["Description"]
-                  d["Most Active Competitor"] = v["Most Active Competitor"]
-                  d["Popular Technology + Business Model"] = v["Popular Technology + Business Model"]
-                  d["Pattern Recognised"] = v["Pattern Recognised"]
                 }
               });
             });
@@ -2341,8 +2415,14 @@
               ];
   
               */
+
+              function focusAreaSort(a, b) {
+                var valA = focusAreaOrder.indexOf(a.replace(/_/g, "/"))
+                var valB = focusAreaOrder.indexOf(b.replace(/_/g, "/"))
+                return valA < valB ? -1 : valA > valB ? 1 : valA >= valB ? 0 : NaN;
+              }
   
-            function focusAreaSort(a, b) {
+            /* function focusAreaSort(a, b) {
               for (i = 0; i < focusAreaOrder.length; i++) {
                 if (a === focusAreaOrder[i]) {
                   var valA = i;
@@ -2352,7 +2432,7 @@
                 }
               }
               return valA < valB ? -1 : valA > valB ? 1 : valA >= valB ? 0 : NaN;
-            }
+            } */
   
             //CHANGE HERE:
             function themeSort(a, b) {
@@ -2604,7 +2684,11 @@
               .value(function(d) {
                 return d.value.value + 2000000000000;
               })
-              .sort(focusAreaSort);
+              .sort(function(a, b) {
+                var valA = focusAreaOrder.indexOf(a.value.key.replace(/_/g, "/"))
+                var valB = focusAreaOrder.indexOf(b.value.key.replace(/_/g, "/"))
+                return valA < valB ? -1 : valA > valB ? 1 : valA >= valB ? 0 : NaN;
+              });
   
             //CHANGE HERE:
             var outerChartPie = d3
@@ -2684,6 +2768,8 @@
             .on("click", function(d) {
               update_bar(d)
             });
+
+            themeFontData = categoryFontObject[0];
   
             var themeSegments = chartSVG
               .selectAll("theme-segments")
@@ -2692,14 +2778,63 @@
               .append("path")
               .attr("d", themeArc)
               .attr("fill", "#132A54")
-              /*.attr("fill", function(d) {
-                return focusAreaeBandColorScale(
-                  d.data.value.values[0]["Opportunity space"]
-                );
-              })
-              .style("opacity", "0.7")*/
               .style("stroke", "white")
-              .style("stroke-width", "2px");
+              .style("stroke-width", "2px")
+              .each(function(d, i) {
+                var firstArcSection = /(^.+?)L/;
+                var newArc = firstArcSection.exec(d3.select(this).attr("d"))[1];
+                d.newArc = newArc.replace(/,/g, " ");
+                d.percentage =
+                    ((d.endAngle - d.startAngle) / 2 + d.startAngle) / 0.0628319;
+                  if (d.percentage >= 100) {
+                    d.percentage -= 100;
+                  }
+                if (d.percentage >= 25 && d.percentage <= 75) {
+                  var startLoc = /M(.*?)A/;
+                  var middleLoc = /A(.*?)0 0 1/;
+                  var endLoc = /0 0 1 (.*?)$/;
+                  d.newStart = endLoc.exec(d.newArc)[1];
+                  d.newEnd = startLoc.exec(d.newArc)[1];
+                  d.middleSec = middleLoc.exec(d.newArc)[1];
+                  d.newArc =
+                    "M" + d.newStart + "A" + d.middleSec + "0 0 0 " + d.newEnd;
+                }
+                d.hiddenArc = chartSVG
+                  .append("path")
+                  .attr("class", "hiddenDonutArcs")
+                  .attr("id", function() {
+                    return (
+                      "hidden-theme-band" + d.data.key
+                    );
+                  })
+                  .attr("d", d.newArc)
+                  .style("fill", "none");
+              })
+
+              var themeLabels = chartSVG
+                .selectAll(".theme-label-text")
+                .data(outerChartPieData)
+                .enter()
+                .append("text")
+                .attr("class", "label theme-label-text")
+                .attr("dy", function(d) {
+                  if (d.percentage >= 25 && d.percentage <= 75) {
+                    return themeFontData.dy_upper;
+                  }
+                  return themeFontData.dy_lower;
+                })
+                .append("textPath")
+                .attr("xlink:href", function(d, i) {
+                  return (
+                    "#" +
+                    "hidden-theme-band" +
+                    d.data.key
+                  );
+                })
+                .attr("startOffset", "50%")
+                .text(function(d) {
+                  return d.data.value.key.toUpperCase();
+                });
   
             var backgroundSegments = chartSVG
               .selectAll("background-segments")
@@ -2781,6 +2916,14 @@
               .arc()
               .innerRadius(outerRadius)
               .outerRadius(outerRadius * 1.095);
+
+            oppSpaceFontData = categoryFontObject[1]
+
+            var labelWidth = (2 * outerRadius * 1.095) / chartPieData.length;
+
+              labelFontData = {
+                limit: labelWidth * 0.6
+              };
   
             var segmentsLabelBand = chartSVG
               .selectAll("path.segment-band")
@@ -2795,12 +2938,41 @@
                 );
               })
               .attr("fill", "#82ADBD")
-              /* .attr("fill", function(d) {
-                return focusAreaeBandColorScale(d.data.value.key);
-              })*/
+              .each(function(d, i) {
+                var firstArcSection = /(^.+?)L/;
+                var newArc = firstArcSection.exec(d3.select(this).attr("d"))[1];
+                d.newArc = newArc.replace(/,/g, " ");
+                d.percentage =
+                  ((d.endAngle - d.startAngle) / 2 + d.startAngle) / 0.0628319;
+                if (d.percentage >= 100) {
+                  d.percentage -= 100;
+                }
+                if (d.percentage >= 25 && d.percentage <= 75) {
+                  var startLoc = /M(.*?)A/;
+                  var middleLoc = /A(.*?)0 0 1/;
+                  var endLoc = /0 0 1 (.*?)$/;
+                  d.newStart = endLoc.exec(d.newArc)[1];
+                  d.newEnd = startLoc.exec(d.newArc)[1];
+                  d.middleSec = middleLoc.exec(d.newArc)[1];
+                  d.newArc =
+                    "M" + d.newStart + "A" + d.middleSec + "0 0 0 " + d.newEnd;
+                }
+                d.hiddenArc = chartSVG
+                  .append("path")
+                  .attr("class", "hiddenDonutArcs")
+                  .attr("id", function() {
+                    return (
+                      "hidden-opp-space-band-" + d.data.value.key.replace(/_/g," ")
+                    );
+                  })
+                  .attr("d", d.newArc)
+                  .style("fill", "none");
+              })
               .on("mouseover", function(d) {
                 labelMouseOver(d);
-                hoverInfoFunction(d);
+                //hoverInfoFunction(d);
+                showOppSpaceTooltip(d)
+
               })
               .on("mouseout", function(d) {
                 if (hoverOn === 0) {
@@ -2821,6 +2993,60 @@
                   hoverInfoFunction(d, "-clicked");
                 } */
               });
+
+              var oppSpaceLabels = chartSVG
+                .selectAll(".opp-space-label-text")
+                .data(chartPieData)
+                .enter()
+                .append("g")
+                .selectAll(".test-class")
+                .data(function(d) {
+                  var limit = labelFontData.limit;
+
+                  return textWrap(
+                    d.data.value.key.toUpperCase().replace(/_/g," "),
+                    d.percentage,
+                    limit
+                  );
+                })
+                .enter()
+                .append("text")
+                .attr("class", "label opp-space-label-text")
+                .attr("dy", function(d, i) {
+                  if (d.percentage >= 25 && d.percentage <= 75) {
+                    if (d.lineLength === 1) {
+                      return "-1.9em";
+                    } else {
+                      if (i === 0) {
+                        return "-2.6em";
+                      } else {
+                        return "-1.3em";
+                      }
+                    }
+                  } else {
+                    if (d.lineLength === 1) {
+                      return "2.7em";
+                    } else {
+                      if (i === 0) {
+                        return "2.1em";
+                      } else {
+                        return "3.3em";
+                      }
+                    }
+                  }
+                })
+                .append("textPath")
+                .attr("xlink:href", function(d, i) {
+                  return (
+                    "#" +
+                    "hidden-opp-space-band-" +
+                    d.text_data.toLowerCase()
+                  );
+                })
+                .attr("startOffset", "50%")
+                .text(function(d) {
+                  return d.data
+                });
   
             var labelRadius = outerRadius * 1.055;
             var labelOtherRadius = outerRadius * 1.02;
@@ -2858,6 +3084,7 @@
                   " 0 1,1 -0.01 0"
               );
   
+  /*
             labels
               .selectAll("text")
               .data(chartPieData)
@@ -2895,7 +3122,7 @@
                 } else {
                   return result[1];
                 }
-              });
+              }); */
   
             var labelThemeRadius = outerRadius + 40;
   
@@ -2915,7 +3142,7 @@
                   labelThemeRadius +
                   " 0 1,1 -0.01 0"
               );
-  
+            /*
             labelsTheme
               .selectAll("text")
               .data(outerChartPieData)
@@ -2931,44 +3158,9 @@
               })
               .text(function(d) {
                 return d.data.value.key.toUpperCase();
-              });
+              }); */
   
-            /* var key = keySVG
-                .selectAll("g.key")
-                .data(fundingAmount)
-                .enter()
-                .append("g")
-                .attr("transform", function(d, i) {
-                  var h = keySize + keySpacing;
-                  var offset = 80;
-                  var horz = -45;
-                  var vert = i * h - offset;
-                  return "translate(" + horz + "," + vert + ")";
-                });
-  
-              key
-                .append("circle")
-                .classed("key-item", true)
-                .attr("r", function(d) {
-                  return nodeSizeScale(d);
-                })
-                .on("mouseover", function(d) {
-                  keyMouseOver(d, "size");
-                })
-                .on("mouseout", keyMouseOut);
-  
-              key
-                .append("text")
-                .text(function(d) {
-                  return d;
-                })
-                .classed("key-labels key-label", true)
-                .attr("dx", "1.8em")
-                .attr("dy", "0.25em")
-                .on("mouseover", function(d) {
-                  keyMouseOver(d, "size");
-                })
-                .on("mouseout", keyMouseOut); */
+
   
             var keyOther = keySVG
               .selectAll("g.key-other")
@@ -3321,19 +3513,10 @@
   
             maturity_list.forEach(function(d) {
               var id = "#" + d.name.toLowerCase() + "-label-path-text";
-              d3.select(id).remove();
+              //d3.select(id).remove();
             });
   
             count_by_year.forEach(function(d) {
-              d.fn
-                .append("text")
-                .attr("class", "year-label-text")
-                .attr("id", "year-" + d.key + "-label-path-text")
-                .append("textPath")
-                .attr("xlink:href", "#year-" + d.key + "-label-path")
-                .attr("startOffset", "50%")
-                .text(d.key);
-  
               chartPieData.forEach(function(v) {
                 d3.select(
                   "#year-" +
@@ -3341,7 +3524,7 @@
                     "-" +
                     v.data.value.key.replace(/ /g, "-").replace(/&/g, "and") +
                     "-segment"
-                ).attr("opacity", 1);
+                ).attr("opacity", 0);
               });
             });
 
@@ -3384,25 +3567,36 @@
               })
               .entries(data);
 
-  
+            
+            nodeData.forEach(function(v) {
+              indexTracker[v.key] = {}
+              v.values.forEach(function(w) {
+                indexTracker[v.key][w.key] = {'slot': 1}
+              })
+            })
+
+            nodeSecondData.forEach(function(v) {
+              indexTrackerYear[v.key] = {}
+              v.values.forEach(function(w) {
+                indexTrackerYear[v.key][w.key] = {'slot': 1}
+              })
+            })
+
             var nodeList = [];
             data.forEach(function(d) {
-                //console.log(d);
                 for (i = 0; i < chartPieData.length; i++) {
                   if (
                     d["Opportunity space"] === chartPieData[i].data.value.key
                   ) {
-                    var tmp_startAngleMin = chartPieData[i].startAngle + 0.025;
-                    var tmp_endAngleMax = chartPieData[i].endAngle - 0.025;
+                    var tmp_startAngleMin = chartPieData[i].startAngle
+                    var tmp_endAngleMax = chartPieData[i].endAngle
                     break;
                   }
                 }
                 for (i = 0; i < maturity_list.length; i++) {
                   if (d["Maturity"] === maturity_list[i]["name"]) {
-                    //console.log('InnerRadius:', maturity_list[i]['inner'])
-                    //console.log('OuterRadius:', maturity_list[i]['outer'])
-                    tmp_innerRadiusMin = maturity_list[i]["inner"] + 0.4;
-                    tmp_outerRadiusMax = maturity_list[i]["outer"] - 0.4;
+                    tmp_innerRadiusMin = maturity_list[i]["inner"]
+                    tmp_outerRadiusMax = maturity_list[i]["outer"]
                     break;
                   }
                 }
@@ -3411,41 +3605,76 @@
                   if (nodeData[i].key === d["Opportunity space"]) {
                     for (j = 0; j < nodeData[i].values.length; j++) {
                       if (nodeData[i].values[j].key === d["Maturity"]) {
-                        var results = assignRandom(
+                        //console.log(nodeData[i].values[j])
+
+                        var congestion = calcCongestion(
+                          tmp_startAngleMin,
+                          tmp_endAngleMax,
+                          tmp_innerRadiusMin,
+                          tmp_outerRadiusMax,
+                          radiusSize,
+                          nodeData[i].values[j].value
+                        )
+                        if (congestion > 10) {
+                           d.results = assignRandom(
+                            tmp_startAngleMin,
+                            tmp_endAngleMax,
+                            tmp_innerRadiusMin,
+                            tmp_outerRadiusMax,
+                            congestion,
+                            nodeList
+                          );  
+                          
+                        } else {
+                          d.results = assignNonRandom(
+                            d,
+                            tmp_startAngleMin,
+                            tmp_endAngleMax,
+                            tmp_innerRadiusMin,
+                            tmp_outerRadiusMax,
+                            nodeData[i].values[j]
+                          )
+                          indexTracker[d["Opportunity space"]][d["Maturity"]]["slot"] += 1
+                        }
+
+
+                        /* var results = assignRandom(
                           tmp_startAngleMin,
                           tmp_endAngleMax,
                           tmp_innerRadiusMin,
                           tmp_outerRadiusMax,
                           nodeList
-                        );
+                        ); */
                       }
                     }
                   }
                 }
 
-                d.x = results[0];
-                d.y = results[1];
+                if (d.results) {
+                d.x = d.results[0];
+                d.y = d.results[1];
+                } else {
+                d.x = 0//results[0];
+                d.y = 0//results[1];
+                }
                 d.opacity = 1;
               });
 
   
             var nodeSecondList = [];
             data.forEach(function(d) {
-              //console.log(d)
               for (i = 0; i < chartPieData.length; i++) {
                 if (d["Opportunity space"] === chartPieData[i].data.value.key) {
-                  var tmp_startAngleMin = chartPieData[i].startAngle + 0.025;
-                  var tmp_endAngleMax = chartPieData[i].endAngle - 0.025;
+                  var tmp_startAngleMin = chartPieData[i].startAngle
+                  var tmp_endAngleMax = chartPieData[i].endAngle
                   break;
                 }
               }
   
               for (i = 0; i < count_by_year.length; i++) {
                 if (d["Founded"] === count_by_year[i].key) {
-                  //console.log('InnerRadius:', count_by_year[i]['inner'])
-                  //console.log('OuterRadius:', count_by_year[i]['outer'])
-                  tmp_innerRadiusMin = count_by_year[i]["inner"] + 6;
-                  tmp_outerRadiusMax = count_by_year[i]["outer"] - 6;
+                  tmp_innerRadiusMin = count_by_year[i]["inner"]
+                  tmp_outerRadiusMax = count_by_year[i]["outer"]
                   break;
                 }
               }
@@ -3453,19 +3682,46 @@
                 if (nodeSecondData[i].key === d["Opportunity space"]) {
                   for (j = 0; j < nodeSecondData[i].values.length; j++) {
                     if (nodeSecondData[i].values[j].key === d["Founded"]) {
-                      var results = assignRandom(
-                        tmp_startAngleMin,
-                        tmp_endAngleMax,
-                        tmp_innerRadiusMin,
-                        tmp_outerRadiusMax,
-                        nodeSecondList
-                      );
+                        var congestion = calcCongestion(
+                          tmp_startAngleMin,
+                          tmp_endAngleMax,
+                          tmp_innerRadiusMin,
+                          tmp_outerRadiusMax,
+                          radiusSize,
+                          nodeSecondData[i].values[j].value
+                        )
+                        if (congestion > 20) {
+                           d.resultsYear = assignRandom(
+                            tmp_startAngleMin,
+                            tmp_endAngleMax,
+                            tmp_innerRadiusMin,
+                            tmp_outerRadiusMax,
+                            congestion,
+                            nodeList
+                          );  
+                        } else {
+                           d.resultsYear = assignNonRandomYear(
+                            d,
+                            tmp_startAngleMin,
+                            tmp_endAngleMax,
+                            tmp_innerRadiusMin,
+                            tmp_outerRadiusMax,
+                            nodeSecondData[i].values[j]
+                          )
+                          indexTrackerYear[d["Opportunity space"]][d["Founded"]]["slot"] += 1
+
+                        }
                     }
                   }
                 }
               }
-              d.yearX = results[0];
-              d.yearY = results[1];
+                if (d.resultsYear) {
+                d.yearX = d.resultsYear[0];
+                d.yearY = d.resultsYear[1];
+                } else {
+                d.yearX = 0//results[0];
+                d.yearY = 0//results[1];
+                }
             });
             /*
               var nodeThirdList = [];
@@ -3531,15 +3787,8 @@
               });
   
             var CompetitorMode = 0;
-  
-            d3.select("#button-17").on("change", function() {
-                if (CompetitorMode === 1) {
-                  CompetitorMode = 0;
-                } else {
-                  CompetitorMode = 1;
-                }
-                switch_competitors();
-              });
+
+            var radiusSize = 2;
 
             var nodes = chartSVG
               .selectAll("nodes")
@@ -3564,10 +3813,10 @@
                 }
               })
               .attr("cx", function(d) {
-                return d.yearX;
+                return d.x;
               })
               .attr("cy", function(d) {
-                return d.yearY;
+                return d.y;
               })
               .attr("fill", function(d) {
                 return nodeColorScale(
@@ -3575,9 +3824,10 @@
                   );
               })
               .on("mouseover", function(d) {
-                nodeMouseOver(d);
+                //nodeMouseOver(d);
+                showNodeTooltip(d)
               })
-              .on("mouseout", nodeMouseOut);
+              .on("mouseout", hideNodeTooltip);
   
             var nodes_activity = chartSVG
               .selectAll("nodes-activity")
@@ -3595,17 +3845,18 @@
               })
               .attr("points", function(d) {
                 var points = [
-                  [d.yearX, d.yearY],
-                  [d.yearX, d.yearY],
-                  [d.yearX, d.yearY]
+                  [d.x, d.y],
+                  [d.x, d.y],
+                  [d.x, d.y]
                 ];
                 return points;
               })
               .attr("fill", "#7C436A")
               .on("mouseover", function(d) {
-                nodeMouseOver(d);
+                //nodeMouseOver(d);
+                showNodeTooltip(d)
               })
-              .on("mouseout", nodeMouseOut);
+              .on("mouseout", hideNodeTooltip);
   
             var nodes_acquired = chartSVG
               .selectAll("nodes-acquired")
@@ -3639,12 +3890,13 @@
               .attr("y", 0)
               .attr("fill", "#FFFD82")
               .attr("transform", function(d) {
-                return "translate(" + d.yearX + "," + d.yearY + ")    rotate(45)";
+                return "translate(" + d.x + "," + d.y + ")    rotate(45)";
               })
               .on("mouseover", function(d) {
-                nodeMouseOver(d);
+                //nodeMouseOver(d);
+                showNodeTooltip(d)
               })
-              .on("mouseout", nodeMouseOut);
+              .on("mouseout", hideNodeTooltip);
   
             /* function keyMouseOver(data, type) {
                 nodes.attr("opacity", function(d) {
@@ -3947,6 +4199,123 @@
                   };
                 });
             } */
+
+            function textWrap(text_data, percentage, limit = 6) {
+              result = [];
+              if (text_data.length > limit) {
+                if (text_data.length >= (limit -1)* 2) {
+                    a = text_data.substr(0, limit).lastIndexOf(" ")
+                    y = text_data.substr(0, a)
+                    a_rem = text_data.substr(a + 1)
+                    b = a_rem.substr(0, limit).lastIndexOf(" ")
+                    z = a_rem.substr(0, b)
+                    result.push({
+                      data: y,
+                      text_data: text_data,
+                      percentage: percentage,
+                      lineLength: 2
+                    });
+                    result.push({
+                      data: z + "...",
+                      text_data: text_data,
+                      percentage: percentage,
+                      lineLength: 2
+                    });
+                } else {
+                var tmp_limit = text_data.length / 2 - 4;
+                var lines = dummy(text_data, tmp_limit);
+
+                lines.forEach(function(d) {
+                  if (d.length > 1) {
+                    d = d.join(" ");
+                  }
+                  if (d !== "") {
+                    result.push({
+                      data: d,
+                      text_data: text_data,
+                      percentage: percentage,
+                      lineLength: lines.length
+                    });
+                  }
+                });
+                }
+              } else {
+                result.push({
+                  data: text_data,
+                  text_data: text_data,
+                  percentage: percentage,
+                  lineLength: 1
+                });
+              }
+              var maxLength = d3.max(result, function(d) {
+                return d.data.length;
+              });
+              result.forEach(function(d) {
+                d.MaxLength = maxLength;
+              });
+              return result;
+            }
+
+                  function dummy(text, limit) {
+        words = text.split(" ");
+        words_rev = temporarySwap([...words]);
+        lines = [];
+        lines_rev = [];
+
+        current_seq_len = 0;
+        current_seq = [];
+        words.forEach(function(d) {
+          current_seq_len += d.length;
+          current_seq.push(d.replace(/�۪/g, "'"));
+          if (current_seq_len > limit) {
+            lines.push(current_seq);
+            current_seq_len = 0;
+            current_seq = [];
+          }
+        });
+        if (current_seq.length > 0) {
+          lines.push(current_seq);
+          current_seq_len = 0;
+          current_seq = [];
+        }
+
+        current_seq_len = 0;
+        current_seq = [];
+        words_rev.forEach(function(d) {
+          current_seq_len += d.length;
+          current_seq.push(d.replace(/�۪/g, "'"));
+          if (current_seq_len > limit) {
+            lines_rev.push(temporarySwap(current_seq));
+            current_seq_len = 0;
+            current_seq = [];
+          }
+        });
+        if (current_seq.length > 0) {
+          lines_rev.push(temporarySwap(current_seq));
+          current_seq_len = 0;
+          current_seq = [];
+        }
+        if (lines.length === 3) {
+          return temporarySwap(lines_rev);
+        }
+        if (lines_rev.length > lines.length && lines_rev.length !== 3) {
+          return temporarySwap(lines_rev);
+        }
+        return lines;
+      }
+
+            function temporarySwap(array) {
+        var left = null;
+        var right = null;
+        var length = array.length;
+        for (left = 0; left < length / 2; left += 1) {
+          right = length - 1 - left;
+          var temporary = array[left];
+          array[left] = array[right];
+          array[right] = temporary;
+        }
+        return array;
+      }
   
             function update_opacity(type) {
               // delete later when you change to industry
@@ -4201,7 +4570,6 @@
                       })
                     })
                     yearHist = yearHist.sort((a, b) => (a.Year > b.Year) ? 1 : -1)
-                    console.log(yearHist)
                     //var parseDate = d3.timeParse("%Y");
                     /* var maxVal = d3.max(bar_data, function(d) {
                         return parseDate(d.Year)
@@ -4475,7 +4843,6 @@
               .attr("class", "bar-axis-label")
               .text("Number of Startups");   
 
-                console.log(maturity_data)
                 }
 
 
@@ -4681,6 +5048,7 @@
             }
   
             function hoverInfoFunction(segment_data, clicked = "") {
+              console.log(segment_data)
               var segmentDesc;
   
               desc.forEach(function(v) {
@@ -4856,8 +5224,9 @@
             }
   
             function labelMouseOut() {
-              d3.select("#label-mouse-over-text").remove();
-              d3.select("#hover-svg-background").remove();
+              //d3.select("#label-mouse-over-text").remove();
+              //d3.select("#hover-svg-background").remove();
+               d3.select("#opp-space-tooltip-container").style("display", "none")
               segmentsLabelBand.attr("opacity", function(d) {
                 return d.opacity;
               });
@@ -4932,6 +5301,99 @@
                 return d.opacity;
               });
             }
+
+            function showOppSpaceTooltip(segment_data, clicked = "") {              
+              desc.forEach(function(v) {
+                if (
+                  segment_data.data.value.key ===
+                  v["Opportunity Space"].toLowerCase().replace(/\//g, "_")
+                ) {
+                  segmentDesc = v.Description;
+                }
+              });
+              var numberOfStartups = 0;
+              var segmentFunding = 0;
+              for (i = 0; i < count_by_focus_area.length; i++) {
+                if (
+                  count_by_focus_area[i].key === segment_data.data.value.key
+                ) {
+                  numberOfStartups = count_by_focus_area[i].values.length;
+                  theme = count_by_focus_area[i].values[0]["Themes"];
+                  themeDesc =
+                    count_by_focus_area[i].values[0]["Theme Definition"];
+                  segmentFunding = d3.sum(
+                    count_by_focus_area[i].values,
+                    function(d) {
+                      return d["Total funding (US$)"];
+                    }
+                  );
+                }
+              }
+              if (numberOfStartups === 0) {
+                  var avgFunding = 0;
+                } else {
+                  var avgFunding = segmentFunding / numberOfStartups;
+                }
+              d3.select("#opp-space-tooltip-container").style("display", "block")
+              d3.select(".opp-space-tooltip-title").text((segment_data.data.value.key).toUpperCase().replace(/_/g, "/"))
+              d3.select("#ostt-1").text(segmentDesc)
+              d3.select("#ostt-3").text(formatFunding(segmentFunding))
+              d3.select("#ostt-5").text(numberOfStartups)
+              d3.select("#ostt-7").text(formatFunding(avgFunding))
+              d3.select("#ostt-8").text(theme.toUpperCase())
+              d3.select("#ostt-9").text(themeDesc)
+            }
+
+            function showNodeTooltip(d) {
+              d3.select(".node-tooltip-title").text(d.Startup);
+              d3.select(".node-tooltip-funding").text("Total Funding: $" + formatFunding(d["Total funding (US$)"]));
+              d3.select(".node-tooltip-description").text(d["Business Description"].replace(/�۪/g, "'"));
+
+              d3.select(".node-tooltip")
+              .style("opacity", 1);
+
+              const { width, height } =  d3.select(".node-tooltip").node().getBoundingClientRect();
+
+              let padding = 10;
+              let x = d3.event.clientX;
+              if (x + padding + width > window.innerWidth) {
+                x = x - padding - width;
+              } else {
+                x = x + padding;
+              }
+              let y = d3.event.clientY;
+              if (y + padding + height > window.innerHeight) {
+                y = y - padding - height;
+              } else {
+                y = y + padding;
+              }
+
+              nodes.attr("opacity", function(v) {
+                if (v["Funding Stage"] === d["Funding Stage"]) {
+                  return 1;
+                } else {
+                  return 0.3;
+                }
+              });
+              if (d["Funding Stage"] === "Acquired") {
+                nodes_acquired.attr("opacity", 1);
+              } else {
+                nodes_acquired.attr("opacity", 0.3);
+              }
+
+              d3.select(".node-tooltip").style("transform", `translate(${x}px,${y}px)`);
+            }
+
+            function hideNodeTooltip() {
+              d3.select(".node-tooltip")
+              .style("opacity", 0);
+              nodes.attr("opacity", function(d) {
+                return d.opacity;
+              });
+              nodes_acquired.attr("opacity", function(d) {
+                return d.opacity;
+              });
+            }
   
             function nodeMouseOver(data) {
               if (radial === "maturity") {
@@ -4957,8 +5419,6 @@
                 })
                 .attr("fill-opacity", 0)
                 .html(function() {
-                  console.log(data);
-                  console.log(dateForMode(data));
                   var x = d3.select(this).attr("x");
                   return hover_info(
                     data["Business Description"],
@@ -5014,7 +5474,6 @@
                     return x;
                   }
                 })
-  
                 .attr("y", function() {
                   return (
                     nodeY -
@@ -5201,7 +5660,6 @@
                       .append("path")
                       .style("fill-opacity", 1)
                       .attr("class", function(d) {
-                        //console.log(d)
                         return (
                           "existing-segments segment-" +
                           d.data.value.key.replace(/ /g, "-").replace(/&/g, "and")
@@ -5665,7 +6123,6 @@
           fundingFormatted = formatFunding(total_funding);
   
           words = text_data.split(/\s+/);
-          //console.log(words_alt);
           lines = [];
           current_seq_len = 0;
           current_seq = [];
@@ -5711,7 +6168,6 @@
   
         function label_wrap(text_data, limit = 7) {
           words = text_data.split(/\s+/);
-          //console.log(words_alt);
           lines = [];
           current_seq_len = 0;
           current_seq = [];
@@ -5774,12 +6230,146 @@
   
           image.src = imgsrc;
         }
+
+        function calcCongestion(
+          tmp_startAngleMin,
+          tmp_endAngleMax,
+          tmp_innerRadiusMin,
+          tmp_outerRadiusMax,
+          radiusSize=2,
+          numNodes
+        ) {
+          // calculate area of arc
+          var areaA = Math.PI * (tmp_outerRadiusMax**2) * (tmp_endAngleMax - tmp_startAngleMin) / 6.28319
+          var areaB = Math.PI * (tmp_innerRadiusMin**2) * (tmp_endAngleMax - tmp_startAngleMin) / 6.28319
+          var area = areaA - areaB
+          
+          // divide by area of circle * numNodes
+          var areaNode = Math.PI * (radiusSize**2)
+
+          // High is lots of space, low is less space.
+          return area / (areaNode * numNodes) 
+        }
+
+        function assignNonRandomYear(
+          data,
+          tmp_startAngleMin,
+          tmp_endAngleMax,
+          tmp_innerRadiusMin,
+          tmp_outerRadiusMax,
+          nodeDataEntry
+        ) {
+            var numNodes = nodeDataEntry.value
+            var horizontalCuts = numNodes/2
+            var verticalCuts = 2
+            var totalSpots = numNodes
+
+          vertDivision = (tmp_outerRadiusMax - tmp_innerRadiusMin) / verticalCuts
+          horDivision = (tmp_endAngleMax - tmp_startAngleMin) / horizontalCuts
+
+          horizontalSlot = 0
+          verticalSlot = 0
+          index = 0
+          loop0:
+          for (let vi = 0; vi <= verticalCuts; vi++) {
+            loop1:
+            for (let hi = 0; hi <= horizontalCuts; hi++) {
+              index ++
+            if (index === indexTrackerYear[data["Opportunity space"]][data["Founded"]]["slot"]) {
+              horizontalSlot = hi
+              verticalSlot = vi
+              break loop0
+            }  
+            }
+          }
+          tmp_innerRadius = tmp_innerRadiusMin + verticalSlot * vertDivision
+          tmp_outerRadius = tmp_innerRadius + vertDivision
+          tmp_startAngle = tmp_startAngleMin + horizontalSlot * horDivision
+          tmp_endAngle = tmp_startAngle + horDivision
+
+          tmp_gen = d3
+            .arc()
+            .innerRadius(tmp_innerRadius)
+            .outerRadius(tmp_outerRadius)
+            .startAngle(tmp_startAngle)
+            .endAngle(tmp_endAngle);
+
+          tmp_x = tmp_gen.centroid()[0];
+          tmp_y = tmp_gen.centroid()[1];
+
+          return [tmp_x, tmp_y];
+        }
+
+        function assignNonRandom(
+          data,
+          tmp_startAngleMin,
+          tmp_endAngleMax,
+          tmp_innerRadiusMin,
+          tmp_outerRadiusMax,
+          nodeDataEntry) {
+            // divide space into a grid?
+            // half till ~number of nodes?
+            var numNodes = nodeDataEntry.value
+            var horizontalCuts = 0
+            var verticalCuts = 0
+                 
+            for (let o = 0; o < numNodes; o++) {
+              if (o % 2 == 0) {
+                horizontalCuts++
+              } else {
+                verticalCuts++
+              }
+              var totalSpots = horizontalCuts * verticalCuts
+              if (totalSpots > numNodes) {
+                break;
+              }
+            }
+
+          vertDivision = (tmp_outerRadiusMax - tmp_innerRadiusMin) / verticalCuts
+          horDivision = (tmp_endAngleMax - tmp_startAngleMin) / horizontalCuts
+
+          horizontalSlot = 0
+          verticalSlot = 0
+          index = 0
+          loop0:
+          for (let vi = 0; vi <= verticalCuts; vi++) {
+            loop1:
+            for (let hi = 0; hi <= horizontalCuts; hi++) {
+              index ++
+            if (index === indexTracker[data["Opportunity space"]][data["Maturity"]]["slot"]) {
+              horizontalSlot = hi
+              verticalSlot = vi
+              break loop0
+            }
+            
+            }
+          }
+
+          tmp_innerRadius = tmp_innerRadiusMin + verticalSlot * vertDivision
+          tmp_outerRadius = tmp_innerRadius + vertDivision
+          tmp_startAngle = tmp_startAngleMin + horizontalSlot * horDivision
+          tmp_endAngle = tmp_startAngle + horDivision
+
+          tmp_gen = d3
+            .arc()
+            .innerRadius(tmp_innerRadius)
+            .outerRadius(tmp_outerRadius)
+            .startAngle(tmp_startAngle)
+            .endAngle(tmp_endAngle);
+
+          tmp_x = tmp_gen.centroid()[0];
+          tmp_y = tmp_gen.centroid()[1];
+
+          return [tmp_x, tmp_y];
+
+          }
   
         function assignRandom(
           tmp_startAngleMin,
           tmp_endAngleMax,
           tmp_innerRadiusMin,
           tmp_outerRadiusMax,
+          congestion,
           nodeList
         ) {
           tmp_startAngle =
@@ -5798,7 +6388,7 @@
             .innerRadius(tmp_innerRadius)
             .outerRadius(tmp_outerRadius)
             .startAngle(tmp_startAngle)
-            .endAngle(tmp_endAngle);
+            .endAngle(tmp_endAngle );
   
           tmp_x = tmp_gen.centroid()[0];
           tmp_y = tmp_gen.centroid()[1];
@@ -5810,7 +6400,7 @@
                 Math.pow(nodeList[l][0] - tmp_x, 2) +
                   Math.pow(nodeList[l][1] - tmp_y, 2)
               );
-              if (distance <= 2) {
+              if (distance <= 8) {
                 distanceCheck = 1;
               }
             }
@@ -5820,6 +6410,7 @@
                 tmp_endAngleMax,
                 tmp_innerRadiusMin,
                 tmp_outerRadiusMax,
+                congestion,
                 nodeList
               );
             } else {
