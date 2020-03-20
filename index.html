@@ -3796,7 +3796,7 @@
               .enter()
               .append("a")
               .attr("xlink:href", function(d) {
-                return d.URL;
+                return formatURL(d.URL)
               })
               .attr("target", "_blank")
               .append("circle")
@@ -3835,7 +3835,7 @@
               .enter()
               .append("a")
               .attr("xlink:href", function(d) {
-                return d.URL;
+                return formatURL(d.URL)
               })
               .attr("target", "_blank")
               .append("polygon")
@@ -3864,7 +3864,7 @@
               .enter()
               .append("a")
               .attr("xlink:href", function(d) {
-                return d.URL;
+                return formatURL(d.URL)
               })
               .attr("target", "_blank")
               .append("rect")
@@ -5342,6 +5342,14 @@
               d3.select("#ostt-7").text(formatFunding(avgFunding))
               d3.select("#ostt-8").text(theme.toUpperCase())
               d3.select("#ostt-9").text(themeDesc)
+            }
+
+            function formatURL(url) {
+              if (url.slice(0,3) === "www") {
+                return "http://" + url
+              } else {
+                return url
+              }
             }
 
             function showNodeTooltip(d) {
