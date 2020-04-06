@@ -1561,11 +1561,6 @@
             d3.csv("https://docs.google.com/spreadsheets/d/e/2PACX-1vSafGm_gSEK_M6dTEcS3sd2N7CcehHPfg561BJtgzrHClIt5DH79yqHI1LpeOLbbwGob_Xi0kVUdxMB/pub?gid=106432015&single=true&output=csv"
             ).then(function(hero_data) { 
 
-              console.log(data)
-
-              
-
-
               spinner.stop();
               d3.select("#button-16").style("display", "block")
               d3.select(".dropdown-industry").style("display", "inline-block")
@@ -1678,7 +1673,7 @@
                 data.forEach(function(w) {
                   if (w.Country === d.properties.name) {
                     var obj = {
-                      "Company Name": w.["Company Name"],
+                      "Company Name": w["Company Name"],
                       Funding: w["Total funding (US$)"],
                       Website: w["Website"],
                       "Year Founded": w["Year Founded"]
@@ -2142,7 +2137,7 @@
                   yearTotal = 0
                   maturityList = []
                   popup_data.forEach(function(v) {
-                    yearTotal += +v{"Year Founded"}
+                    yearTotal += +v["Year Founded"]
                     if (v.Maturity !== "") {
                       maturityList.push(v.Maturity)
                     }
@@ -3854,7 +3849,7 @@
               .append("polygon")
               .attr("class", "nodes nodes-activity")
               .attr("id", function(d) {
-                return d["Comapny Name"].toLowerCase().replace(/ /g, "-");
+                return d["Company Name"].toLowerCase().replace(/ /g, "-");
               })
               .attr("points", function(d) {
                 var points = [
