@@ -1561,6 +1561,8 @@
             d3.csv("https://docs.google.com/spreadsheets/d/e/2PACX-1vSafGm_gSEK_M6dTEcS3sd2N7CcehHPfg561BJtgzrHClIt5DH79yqHI1LpeOLbbwGob_Xi0kVUdxMB/pub?gid=106432015&single=true&output=csv"
             ).then(function(hero_data) { 
 
+              console.log(data)
+
               
 
 
@@ -1579,23 +1581,23 @@
               });
 
               var themeOrder = [... new Set(desc.map(function(d) {
-                return d["Themes"]
+                return d["Theme"]
               }))]
 
               // Filter data for startups noot in description:
               new_data = []
               data.forEach(function(d) {
-                d["Opportunity space"] = d["Opportunity space"].toLowerCase()
-                if (d["Opportunity space"] === "") {
+                d["Opportunity Space"] = d["Opportunity Space"].toLowerCase()
+                if (d["Opportunity Space"] === "") {
                   console.log('ERROR, blank Opportunity Space Entry:', d)
                 }
-                if (d["Founded"] === "") {
+                if (d["YearFounded"] === "") {
                   console.log('ERROR, blank Founded Entry:', d)
                 }
                 if (d["Maturity"] === "") {
                   console.log('ERROR, blank Maturity Entry:', d)
                 }
-                if (focusAreaOrder.indexOf(d["Opportunity space"]) < 0) {
+                if (focusAreaOrder.indexOf(d["Opportunity Space"]) < 0) {
                   console.log('ERROR, bad Opportunity Space Entry:', d)
                 } else {
                   new_data.push(d)
@@ -1605,11 +1607,11 @@
               data = new_data
 
             data = data.filter(function(d) {
-              return d["Opportunity space"] !== "";
+              return d["Opportunity Space"] !== "";
             });
   
             data = data.filter(function(d) {
-              return d["Founded"] !== "";
+              return d["Year Founded"] !== "";
             });
 
              data = data.filter(function(d) {
@@ -1676,10 +1678,10 @@
                 data.forEach(function(w) {
                   if (w.Country === d.properties.name) {
                     var obj = {
-                      Startup: w.Startup,
+                      "Company Name": w.["Company Name"],
                       Funding: w["Total funding (US$)"],
-                      URL: w["URL"],
-                      Year: w["Founded"]
+                      Website: w["Website"],
+                      "Year Founded": w["Year Founded"]
                     };
                     startup_list.push(obj);
                   }
@@ -1690,12 +1692,12 @@
                     "<tr class='table-header'><td>Company:<\/td><td>Funding:<\/td><td>Founded Year:<\/td><\/tr>"
                 startup_list.forEach(function(v) {
                   table +=
-                    "<tr><td><a href='" + v.URL + "' target='_blank'>" +
-                    v.Startup +
+                    "<tr><td><a href='" + v.Website + "' target='_blank'>" +
+                    v["Company Name"] +
                     "</a><\/td><td>$" +
                       formatFunding(v.Funding) +
                     "<\/td><td>" +
-                    v.Year +
+                    v["Year Founded"] +
                     "<\/td><\/tr>";
                 });
                 table += "<\/table>";
@@ -2061,7 +2063,7 @@
                           })
                           .attr("opacity", function(d) {
                             if (
-                              d["Opportunity space"] === chartPieData[i].data.value.key
+                              d["Opportunity Space"] === chartPieData[i].data.value.key
                             ) {
                               return d.opacity;
                             } else {
@@ -2115,7 +2117,7 @@
                           })
                           .attr("opacity", function(d) {
                             if (
-                              d["Opportunity space"] === chartPieData[i].data.value.key
+                              d["Opportunity Space"] === chartPieData[i].data.value.key
                             ) {
                               return d.opacity;
                             } else {
@@ -2130,7 +2132,7 @@
                 })
 
                 var popup_data = data.filter(function(d) {
-                    return d["Opportunity space"].toLowerCase() === opp_space;
+                    return d["Opportunity Space"].toLowerCase() === opp_space;
                   });
 
                   var numStartups = popup_data.length
@@ -2140,7 +2142,7 @@
                   yearTotal = 0
                   maturityList = []
                   popup_data.forEach(function(v) {
-                    yearTotal += +v.Founded
+                    yearTotal += +v{"Year Founded"}
                     if (v.Maturity !== "") {
                       maturityList.push(v.Maturity)
                     }
@@ -2149,10 +2151,10 @@
                   var avgYear = Math.round(yearTotal/numStartups)
                   var maturityMode = modeArray(maturityList)
 
-                  d3.select("#theme-tag").html(popup_data[0]["Themes"])
-                  d3.select("#focus-area-tag").html(popup_data[0]["Opportunity space"])
-                  d3.select(".opportunity-space-title").html(popup_data[0]["Opportunity space"])
-                  d3.select(".opportunity-space-description").html(popup_data[0]["Opportunity space Description"])
+                  d3.select("#theme-tag").html(popup_data[0]["Theme"])
+                  d3.select("#focus-area-tag").html(popup_data[0]["Opportunity Space"])
+                  d3.select(".opportunity-space-title").html(popup_data[0]["Opportunity Space"])
+                  d3.select(".opportunity-space-description").html(popup_data[0]["Opportunity Space Description"])
                   d3.select("#total-no-startups").html(numStartups)
                   d3.select("#total-avg-funding").html("$" + formatFunding(funding_amount) + ", $" + formatFunding(avgFunding))
                   d3.select("#avg-funding-year").html(avgYear + ", " + maturityMode[0] )
@@ -2172,7 +2174,7 @@
                   var extra = [0, 1, 2]
                   heroPopupData.forEach(function(v, i) {
                     extra = extra.splice(1)
-                      if (v.Name !== "COMPETITOR") {
+                      if (v["Company Name"] !== "COMPETITOR") {
                         d3.select("#hs-" + i).style("display", "")
 
                           if (v["Logo URL"] !== "") {
@@ -2191,13 +2193,13 @@
                                         hs_website += "<a href='" + v["Website"] + "' target='_blank'>" + v["Website"] + "<\/a>"
 
                                     var hs_location = "<span style='font-family: Graphik Bold'>Location:<\/span> "
-                                        hs_location += v["Location"]
+                                        hs_location += v["Country"]
 
                                         var hs_round = "<span style='font-family: Graphik Bold'>Funding Round:<\/span> "
-                                            hs_round += v["Funding Round"]
+                                            hs_round += v["Funding Stage"]
     
                                         var hs_amount = "<span style='font-family: Graphik Bold'>Funding Amount:<\/span> "
-                                            hs_amount += v["Funding Amount"]
+                                            hs_amount += v["Total funding (US$)"]
         
                                             var hs_year = "<span style='font-family: Graphik Bold'>Year:<\/span> "
                                                 hs_year += v["Year Founded"]
@@ -2238,7 +2240,7 @@
                       bar_data = popup_data
                       bar_data.forEach(function(v) {
                           v.Funding = v["Total funding (US$)"]
-                          v.Year = v["Founded"]
+                          v["Year Founded"] = v["Year Founded"]
                       })
                       update_bar("Amount of Funding")
                     } else {
@@ -2269,10 +2271,10 @@
                 data.forEach(function(w) {
                     if (w.Country === d.properties.name) {
                         var obj = {
-                            Startup: w.Startup,
+                            "Company Name": w["Company Name"],
                             Funding: w["Total funding (US$)"],
-                            URL: w["URL"],
-                            Year: w["Founded"]
+                            Website: w["Website"],
+                            'Year Founded': w["Year Founded"]
                           };
                           bar_data.push(obj);
                     }
@@ -2394,18 +2396,18 @@
               }
   
               d["Total funding (US$)"] = (d["Total funding (US$)"])
-              d["Opportunity space"] = d["Opportunity space"]
+              d["Opportunity Space"] = d["Opportunity Space"]
                 .toLowerCase()
                 .replace(/\//g, "_");
   
               desc.forEach(function(v) {
                 if (
-                  d["Opportunity space"] ===
+                  d["Opportunity Space"] ===
                   v["Opportunity Space"].toLowerCase().replace(/\//g, "_")
                 ) {
-                  d["Themes"] = v["Themes"];
+                  d["Theme"] = v["Theme"];
                   d["Theme Definition"] = v["Theme Definition"];
-                  d["Opportunity space Description"] = v["Description"]
+                  d["Opportunity Space Description"] = v["Description"]
                 }
               });
             });
@@ -2541,7 +2543,7 @@
             var focusAreaSorted = d3
               .nest()
               .key(function(d) {
-                return d["Opportunity space"];
+                return d["Opportunity Space"];
               })
               .sortKeys(focusAreaSort)
               .rollup(function(v) {
@@ -2556,7 +2558,7 @@
             var count_by_focus_area = d3
               .nest()
               .key(function(d) {
-                return d["Opportunity space"];
+                return d["Opportunity Space"];
               })
               .sortKeys(focusAreaSort)
               .entries(data);
@@ -2564,7 +2566,7 @@
             var count_by_themes = d3
               .nest()
               .key(function(d) {
-                return d["Themes"];
+                return d["Theme"];
               })
               .sortKeys(themeSort)
               .entries(data);
@@ -2603,7 +2605,7 @@
             var count_by_year = d3
               .nest()
               .key(function(d) {
-                return d["Founded"];
+                return d["Year Founded"];
               })
               .sortKeys(d3.ascending)
               .rollup(function(v) {
@@ -2703,7 +2705,7 @@
                 var number_of_opp_spaces = [
                   ...new Set(
                     d.value.values.map(function(v) {
-                      return v["Opportunity space"];
+                      return v["Opportunity Space"];
                     })
                   )
                 ];
@@ -3542,7 +3544,7 @@
             var nodeData = d3
             .nest()
             .key(function(d) {
-              return d["Opportunity space"];
+              return d["Opportunity Space"];
             })
             .key(function(d) {
               return d["Maturity"];
@@ -3555,10 +3557,10 @@
             var nodeSecondData = d3
               .nest()
               .key(function(d) {
-                return d["Opportunity space"];
+                return d["Opportunity Space"];
               })
               .key(function(d) {
-                return d["Founded"];
+                return d["Year Founded"];
               })
               .rollup(function(v) {
                 return v.length;
@@ -3568,10 +3570,10 @@
             var nodeThirdData = d3
               .nest()
               .key(function(d) {
-                return d["Opportunity space"];
+                return d["Opportunity Space"];
               })
               .key(function(d) {
-                return d["Founded"];
+                return d["Year Founded"];
               })
               .rollup(function(v) {
                 return v.length;
@@ -3597,7 +3599,7 @@
             data.forEach(function(d) {
                 for (i = 0; i < chartPieData.length; i++) {
                   if (
-                    d["Opportunity space"] === chartPieData[i].data.value.key
+                    d["Opportunity Space"] === chartPieData[i].data.value.key
                   ) {
                     var tmp_startAngleMin = chartPieData[i].startAngle
                     var tmp_endAngleMax = chartPieData[i].endAngle
@@ -3613,7 +3615,7 @@
                 }
 
                 for (i = 0; i < nodeData.length; i++) {
-                  if (nodeData[i].key === d["Opportunity space"]) {
+                  if (nodeData[i].key === d["Opportunity Space"]) {
                     for (j = 0; j < nodeData[i].values.length; j++) {
                       if (nodeData[i].values[j].key === d["Maturity"]) {
                         //console.log(nodeData[i].values[j])
@@ -3645,7 +3647,7 @@
                             tmp_outerRadiusMax,
                             nodeData[i].values[j]
                           )
-                          indexTracker[d["Opportunity space"]][d["Maturity"]]["slot"] += 1
+                          indexTracker[d["Opportunity Space"]][d["Maturity"]]["slot"] += 1
                         }
 
 
@@ -3675,7 +3677,7 @@
             var nodeSecondList = [];
             data.forEach(function(d) {
               for (i = 0; i < chartPieData.length; i++) {
-                if (d["Opportunity space"] === chartPieData[i].data.value.key) {
+                if (d["Opportunity Space"] === chartPieData[i].data.value.key) {
                   var tmp_startAngleMin = chartPieData[i].startAngle
                   var tmp_endAngleMax = chartPieData[i].endAngle
                   break;
@@ -3683,16 +3685,16 @@
               }
   
               for (i = 0; i < count_by_year.length; i++) {
-                if (d["Founded"] === count_by_year[i].key) {
+                if (d["Year Founded"] === count_by_year[i].key) {
                   tmp_innerRadiusMin = count_by_year[i]["inner"]
                   tmp_outerRadiusMax = count_by_year[i]["outer"]
                   break;
                 }
               }
               for (i = 0; i < nodeSecondData.length; i++) {
-                if (nodeSecondData[i].key === d["Opportunity space"]) {
+                if (nodeSecondData[i].key === d["Opportunity Space"]) {
                   for (j = 0; j < nodeSecondData[i].values.length; j++) {
-                    if (nodeSecondData[i].values[j].key === d["Founded"]) {
+                    if (nodeSecondData[i].values[j].key === d["Year Founded"]) {
                         var congestion = calcCongestion(
                           tmp_startAngleMin,
                           tmp_endAngleMax,
@@ -3719,7 +3721,7 @@
                             tmp_outerRadiusMax,
                             nodeSecondData[i].values[j]
                           )
-                          indexTrackerYear[d["Opportunity space"]][d["Founded"]]["slot"] += 1
+                          indexTrackerYear[d["Opportunity Space"]][d["Year Founded"]]["slot"] += 1
 
                         }
                     }
@@ -3807,7 +3809,7 @@
               .enter()
               .append("a")
               .attr("xlink:href", function(d) {
-                return formatURL(d.URL)
+                return formatURL(d.Website)
               })
               .attr("target", "_blank")
               .append("circle")
@@ -3846,13 +3848,13 @@
               .enter()
               .append("a")
               .attr("xlink:href", function(d) {
-                return formatURL(d.URL)
+                return formatURL(d.Website)
               })
               .attr("target", "_blank")
               .append("polygon")
               .attr("class", "nodes nodes-activity")
               .attr("id", function(d) {
-                return d["Startup"].toLowerCase().replace(/ /g, "-");
+                return d["Comapny Name"].toLowerCase().replace(/ /g, "-");
               })
               .attr("points", function(d) {
                 var points = [
@@ -3875,13 +3877,13 @@
               .enter()
               .append("a")
               .attr("xlink:href", function(d) {
-                return formatURL(d.URL)
+                return formatURL(d.Website)
               })
               .attr("target", "_blank")
               .append("rect")
               .attr("class", "nodes nodes-acquired")
               .attr("id", function(d) {
-                return d["Startup"].toLowerCase().replace(/ /g, "-");
+                return d["Company Name"].toLowerCase().replace(/ /g, "-");
               })
               .attr("width", function(d) {
                 if (d["Funding Stage"] === "Acquired") {
@@ -4045,7 +4047,7 @@
               }
               if (type === "focus area" && filterKey !== "") {
                 nodes.attr("opacity", function(d) {
-                  if (d["Opportunity space"].toLowerCase() !== filterKey) {
+                  if (d["Opportunity Space"].toLowerCase() !== filterKey) {
                     d.opacity = 0.3;
                   } else {
                     d.opacity = 1;
@@ -4054,7 +4056,7 @@
                 });
   
                 nodes_acquired.attr("opacity", function(d) {
-                  if (d["Opportunity space"].toLowerCase() !== filterKey) {
+                  if (d["Opportunity Space"].toLowerCase() !== filterKey) {
                     d.opacity = 0.3;
                   } else {
                     d.opacity = 1;
@@ -4869,7 +4871,7 @@
   
                 nodes
                   .transition()
-                  .duration(animationDuration)
+                  .duration(animationDuration)  
                   .attrTween("cx", function(d) {
                     var i = d3.interpolate(d.x, d.yearX);
                     return function(t) {
@@ -5015,7 +5017,7 @@
                 CompetitorMode === 0 ||
                 data["Competitor Categor  y"] !== "Activity"
               ) {
-                return data.Founded;
+                return data["Year Founded"];
               } else {
                 return data["Activity/Acquisition Time"];
               }
@@ -5095,7 +5097,7 @@
                       count_by_focus_area[i].key === segment_data.data.value.key
                     ) {
                       numberOfStartups = count_by_focus_area[i].values.length;
-                      theme = count_by_focus_area[i].values[0]["Themes"];
+                      theme = count_by_focus_area[i].values[0]["Theme"];
                       themeDesc =
                         count_by_focus_area[i].values[0]["Theme Definition"];
                       segmentFunding = d3.sum(
@@ -5204,7 +5206,7 @@
               var count_by_focus_area = d3
                 .nest()
                 .key(function(d) {
-                  return d["Opportunity space"];
+                  return d["Opportunity Space"];
                 })
                 .sortKeys(focusAreaSort)
                 .entries(
@@ -5218,7 +5220,7 @@
                 );
   
               nodes.attr("opacity", function(d) {
-                if (d["Opportunity space"] === segment_data.data.value.key) {
+                if (d["Opportunity Space"] === segment_data.data.value.key) {
                   return 1;
                 } else {
                   return 0.3;
@@ -5226,7 +5228,7 @@
               });
   
               nodes_acquired.attr("opacity", function(d) {
-                if (d["Opportunity space"] === segment_data.data.value.key) {
+                if (d["Opportunity Space"] === segment_data.data.value.key) {
                   return 1;
                 } else {
                   return 0.3;
@@ -5329,7 +5331,7 @@
                   count_by_focus_area[i].key === segment_data.data.value.key
                 ) {
                   numberOfStartups = count_by_focus_area[i].values.length;
-                  theme = count_by_focus_area[i].values[0]["Themes"];
+                  theme = count_by_focus_area[i].values[0]["Theme"];
                   themeDesc =
                     count_by_focus_area[i].values[0]["Theme Definition"];
                   segmentFunding = d3.sum(
@@ -5364,7 +5366,7 @@
             }
 
             function showNodeTooltip(d) {
-              d3.select(".node-tooltip-title").text(d.Startup);
+              d3.select(".node-tooltip-title").text(d["Company Name"]);
               d3.select(".node-tooltip-funding").text("Total Funding: $" + formatFunding(d["Total funding (US$)"]));
               d3.select(".node-tooltip-description").text(d["Business Description"].replace(/�۪/g, "'"));
 
@@ -5441,7 +5443,7 @@
                   var x = d3.select(this).attr("x");
                   return hover_info(
                     data["Business Description"],
-                    data["Startup"],
+                    data["Company Name"],
                     dateForMode(data),
                     data["Total funding (US$)"],
                     x
@@ -5508,7 +5510,7 @@
                   var x = d3.select(this).attr("x");
                   return hover_info(
                     data["Business Description"],
-                    data["Startup"],
+                    data["Company Name"],
                     dateForMode(data),
                     data["Total funding (US$)"],
                     x
@@ -5880,7 +5882,7 @@
                     })
                     .attr("opacity", function(d) {
                       if (
-                        d["Opportunity space"] === chartPieData[i].data.value.key
+                        d["Opportunity Space"] === chartPieData[i].data.value.key
                       ) {
                         return d.opacity;
                       } else {
@@ -5929,7 +5931,7 @@
                     })
                     .attr("opacity", function(d) {
                       if (
-                        d["Opportunity space"] === chartPieData[i].data.value.key
+                        d["Opportunity Space"] === chartPieData[i].data.value.key
                       ) {
                         return d.opacity;
                       } else {
@@ -6294,7 +6296,7 @@
             loop1:
             for (let hi = 0; hi <= horizontalCuts; hi++) {
               index ++
-            if (index === indexTrackerYear[data["Opportunity space"]][data["Founded"]]["slot"]) {
+            if (index === indexTrackerYear[data["Opportunity Space"]][data["Year Founded"]]["slot"]) {
               horizontalSlot = hi
               verticalSlot = vi
               break loop0
@@ -6355,7 +6357,7 @@
             loop1:
             for (let hi = 0; hi <= horizontalCuts; hi++) {
               index ++
-            if (index === indexTracker[data["Opportunity space"]][data["Maturity"]]["slot"]) {
+            if (index === indexTracker[data["Opportunity Space"]][data["Maturity"]]["slot"]) {
               horizontalSlot = hi
               verticalSlot = vi
               break loop0
