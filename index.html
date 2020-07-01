@@ -1552,13 +1552,13 @@
           .attr("x", -titleLogoWidth / 2); 
   
         d3.csv(
-          "https://cors-anywhere.herokuapp.com/https://docs.google.com/spreadsheets/d/e/2PACX-1vSafGm_gSEK_M6dTEcS3sd2N7CcehHPfg561BJtgzrHClIt5DH79yqHI1LpeOLbbwGob_Xi0kVUdxMB/pub?gid=1007226164&single=true&output=csv"
+          "EduardoData - TradeTransportV2.csv"
         ).then(function(data) {
           d3.csv(
-            "https://cors-anywhere.herokuapp.com/https://docs.google.com/spreadsheets/d/e/2PACX-1vSafGm_gSEK_M6dTEcS3sd2N7CcehHPfg561BJtgzrHClIt5DH79yqHI1LpeOLbbwGob_Xi0kVUdxMB/pub?gid=1034085981&single=true&output=csv"
+            "EduardoData - TradeTransportV2-Definitions.csv"
           ).then(function(desc) {
 
-            d3.csv("https://cors-anywhere.herokuapp.com/https://docs.google.com/spreadsheets/d/e/2PACX-1vSafGm_gSEK_M6dTEcS3sd2N7CcehHPfg561BJtgzrHClIt5DH79yqHI1LpeOLbbwGob_Xi0kVUdxMB/pub?gid=106432015&single=true&output=csv"
+            d3.csv("EduardoData - TradeTransportV2-HeroStartups.csv"
             ).then(function(hero_data) { 
 
               spinner.stop();
