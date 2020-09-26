@@ -101,7 +101,7 @@
         fill: white;
         text-anchor: middle;
         font-weight: bold;
-        font-size: 6px;
+        font-size: 10px;
         font-family: "Graphik Bold";
       }
 
@@ -1558,7 +1558,7 @@
           .attr("x", -titleLogoWidth / 2); 
   
         d3.csv(
-          "Compass Source Sheet (Decarb Sep 2020) - Compass.csv"
+          "Compass Source Sheet (Decarb Sep 2020).csv"
         ).then(function(data) {
           d3.csv(
             "EduardoData - TradeTransportV2-Definitions.csv"
@@ -1595,16 +1595,16 @@
                 }
                 d["Opportunity Space"] = d["Opportunity Space"].toLowerCase()
                 if (d["Opportunity Space"] === "") {
-                  console.log('ERROR, blank Opportunity Space Entry:', d)
+                  //console.log('ERROR, blank Opportunity Space Entry:', d)
                 }
                 if (d["YearFounded"] === "") {
-                  console.log('ERROR, blank Founded Entry:', d)
+                  //console.log('ERROR, blank Founded Entry:', d)
                 }
                 if (d["Maturity"] === "") {
-                  console.log('ERROR, blank Maturity Entry:', d)
+                  //console.log('ERROR, blank Maturity Entry:', d)
                 }
                 if (focusAreaOrder.indexOf(d["Opportunity Space"]) < 0) {
-                  console.log('ERROR, bad Opportunity Space Entry:', d)
+                  //console.log('ERROR, bad Opportunity Space Entry:', d)
                 } else {
                   new_data.push(d)
                 }
@@ -1732,7 +1732,7 @@
                         "#background-segment-" +
                         v.data.value.key
                           .replace(/ /g, "-")
-                          .replace(/&/g, "and");
+                          .replace(/&/g, "and").replace(/:/g, "")
                           var tmp_width =
                           d3
                             .select(selection)
@@ -1743,114 +1743,57 @@
                             .select(selection)
                             .node()
                             .getBoundingClientRect().height + 40
-
-                        d3.select(".svg-container").style("width", tmp_width + "px").style("height", tmp_height + "px")
         
                         var tmp_svg = d3
-                          .select(".svg-container")
-                          .append("svg")
-                          .attr("width", tmp_width)
-                          .attr("height", tmp_height);
+                        .select(".svg-container")
+                        .append("svg")
+                        .attr("width", width/2)
+                        .attr("height", height/2);
 
-                          if (i === 0) {
-                            var hor = tmp_width - 90
-                            var ver = tmp_height + 45;
+                        var clientRect =
+                        d3
+                          .select(selection)
+                          .node()
+                          .getBoundingClientRect()
+
+                          var tmp_angle = (6.283/chartPieData.length)*(i+1)
+                          var adj = outerRadius * Math.cos(tmp_angle)
+                          var opp = outerRadius * Math.sin(tmp_angle)
+                          var adjR = (innerRadius+110) * Math.cos(tmp_angle)
+                          var oppR = (innerRadius+110) * Math.sin(tmp_angle)
+                          var quad = 3
+                          var hor = 0
+                          var ver = 50
+                          if (tmp_angle < 6.283/4) {
+                            quad = 1
+                            hor += Math.abs(Math.sin(tmp_angle+6.283/4)*width/8)
+                            ver = height/2
+                          } else {
+                            if (tmp_angle < 6.283/2) {
+                              quad = 2
+                              hor += Math.abs(Math.sin(tmp_angle+6.283/4)*width/8)
+                            } else {
+                              if (tmp_angle < 3*6.283/4) {
+                                hor = width/2
+                                hor-= Math.abs(Math.sin(tmp_angle+6.283/4)*width/8)
+                              } else {
+                                hor = width/2
+                                hor-= Math.abs(Math.sin(tmp_angle+6.283/4)*width/8)
+                                ver = height/2
+                                ver-= Math.abs(Math.sin(tmp_angle)*width/4)
+                              }
+                            }
                           }
-                          if (i === 1) {
-                            var hor = tmp_width - 180;
-                            var ver = tmp_height + 40;
+
+                          if (i == 1) {
+                            ver -= 50
                           }
-                          if (i === 2) {
-                            var hor = tmp_width - 220;
-                            var ver = tmp_height + 20;
+                          if (i == 2) {
+                            ver += 50
+                            hor -= 25
                           }
-                          if (i === 3) {
-                            var hor = tmp_width - 285;
-                            var ver = tmp_height + 20;
-                          }
-                          if (i === 4) {
-                            var hor = tmp_width - 330;
-                            var ver = tmp_height - 0;
-                          }
-                          if (i === 5) {
-                            var hor = tmp_width - 330;
-                            var ver = tmp_height - 20;
-                          }
-                          if (i === 6) {
-                            var hor = tmp_width - 355;
-                            var ver = tmp_height - 70;
-                          }
-                          if (i === 7) {
-                            var hor = tmp_width - 320;
-                            var ver = tmp_height - 150;
-                          }
-                          if (i === 8) {
-                            var hor = tmp_width - 300;
-                            var ver = tmp_height - 210;
-                          }
-                          if (i === 9) {
-                            var hor = tmp_width - 265;
-                            var ver = tmp_height - 275;
-                          }
-                          if (i === 10) {
-                            var hor = tmp_width - 205;
-                            var ver = tmp_height - 305;
-                          }
-                          if (i === 11) {
-                            var hor = tmp_width - 135;
-                            var ver = tmp_height - 345;
-                          }
-                          if (i === 12) {
-                            var hor = tmp_width - 75;
-                            var ver = tmp_height - 345;
-                          }
-                          if (i === 13) {
-                            var hor = tmp_width - 0;
-                            var ver = tmp_height - 345;
-                          }
-                          if (i === 14) {
-                            var hor = tmp_width - 0;
-                            var ver = tmp_height - 320;
-                          }
-                          if (i === 15) {
-                            var hor = tmp_width + 30;
-                            var ver = tmp_height - 280;
-                          }
-                          if (i === 16) {
-                            var hor = tmp_width + 30;
-                            var ver = tmp_height - 220;
-                          }
-                          if (i === 17) {
-                            var hor = tmp_width + 35;
-                            var ver = tmp_height - 140;
-                          }
-                          if (i === 18) {
-                            var hor = tmp_width + 45;
-                            var ver = tmp_height - 60;
-                          }
-                          if (i === 19) {
-                            var hor = tmp_width + 45;
-                            var ver = tmp_height - 10;
-                          }
-                          if (i === 20) {
-                            var hor = tmp_width + 45;
-                            var ver = tmp_height - 10;
-                          }
-                          if (i === 21) {
-                            var hor = tmp_width + 25;
-                            var ver = tmp_height + 30;
-                          }
-                          if (i === 22) {
-                            var hor = tmp_width + 25;
-                            var ver = tmp_height + 30;
-                          }
-                          if (i === 23) {
-                            var hor = tmp_width - 5;
-                            var ver = tmp_height + 30;
-                          }
-                          if (i === 24) {
-                            var hor = tmp_width - 5;
-                            var ver = tmp_height + 45;
+                          if (i == 4) {
+                            hor -= 50
                           }
 
                           var tmp_chartSVG = tmp_svg
@@ -2008,7 +1951,7 @@
                       return percentage + "%";
                     })
                     .text(function(d) {
-                      return label_wrap(d.data.value.key.toUpperCase())[0];
+                      return label_wrap(d.data.value.key.toUpperCase())[0].replace(/_/g, " ")
                     });
   
                   tmpLabelsOther
@@ -2393,15 +2336,11 @@
   
             // correct formatting of total funding values to numbers
             data.forEach(function(d) {
-              d["Total funding (US$)"] = d["Total funding (US$)"].replace(
-                /,/g,
-                ""
-              );
-              if (d["Total funding (US$)"] === "" || d["Total funding (US$)"] === "Unfunded" || d["Total funding (US$)"] === "Funded") {
+              if (d["Total funding (US$)"] == "" || d["Total funding (US$)"] === "Unfunded" || d["Total funding (US$)"] === "Funded") {
                 d["Total funding (US$)"] = 0;
-              }
+              } 
   
-              d["Total funding (US$)"] = (d["Total funding (US$)"])
+
               d["Opportunity Space"] = d["Opportunity Space"]
                 .toLowerCase()
                 .replace(/\//g, "_");
@@ -2619,6 +2558,9 @@
               filterRegions = count_by_region.map(function(v) {
                 return v.key
               })
+
+              filterOther = [...fundingCategoryRangeUnique]
+              filterOther.push("Acquired")
 
   
 
@@ -2920,7 +2862,6 @@
                 .attr("fill", yearSegmentColorScale(v.key))
                 .style("cursor", "pointer")
                 .on("click", function(d) {
-                  //console.log(d)
                   update_popup(d)
                 })
             });
@@ -3040,7 +2981,7 @@
                 .attr("dy", function(d, i) {
                   if (d.percentage >= 25 && d.percentage <= 75) {
                     if (d.lineLength === 1) {
-                      return "-1.2em";
+                      return "-1.0em";
                     } else {
                       if (i === 0) {
                         return "-2.6em";
@@ -3050,7 +2991,7 @@
                     }
                   } else {
                     if (d.lineLength === 1) {
-                      return "1.9em";
+                      return "1.8em";
                     } else {
                       if (i === 0) {
                         return "2.1em";
@@ -3073,7 +3014,7 @@
                   return d.data
                 });
   
-            var labelRadius = outerRadius * 1.055;
+            var labelRadius = outerRadius * 1.035;
             var labelOtherRadius = outerRadius * 1.02;
   
             var labels = chartSVG.append("g").classed("labels", true);
@@ -3188,7 +3129,7 @@
             var keyRegionTitle = keySVG
               .append("text")
               .attr("class", "key-title")
-              .text("Region Key:")
+              .text("Region Filter:")
               .attr("y", -10)
               .attr("x", -85);
 
@@ -3264,6 +3205,9 @@
               });
   
             var keyAcquired = keySVG
+            .selectAll("g.key-other")
+              .data(["Acquired"])
+              .enter()
               .append("g")
               .attr("transform", "translate(-69,-40)");
   
@@ -3279,8 +3223,16 @@
               .on("mouseover", function(d) {
                 keyMouseOver("Acquired", "acquired");
               })
-              .on("mouseout", keyMouseOut)
               .on("click", function(d) {
+                if (filterOther.indexOf(d) < 0) {
+                  filterOther.push(d)             
+                } else {
+                  filterOther = removeFromList(d, filterOther)
+                }
+                updateNodesbyOther()
+              })
+              .on("mouseout", keyMouseOut)
+              /*.on("click", function(d) {
                 if (filterKey === "acquired") {
                   filterKey = "";
                   updateNodes("key", filterKey);
@@ -3288,7 +3240,7 @@
                   filterKey = "acquired";
                   updateNodes("key", filterKey);
                 }
-              });
+              });*/
   
             keyAcquired
               .append("text")
@@ -3299,8 +3251,16 @@
               .on("mouseover", function() {
                 keyMouseOver("Acquired", "acquired");
               })
-              .on("mouseout", keyMouseOut)
               .on("click", function(d) {
+                if (filterOther.indexOf(d) < 0) {
+                  filterOther.push(d)             
+                } else {
+                  filterOther = removeFromList(d, filterOther)
+                }
+                updateNodesbyOther()
+              })
+              .on("mouseout", keyMouseOut)
+              /*.on("click", function(d) {
                 if (filterKey === "acquired") {
                   filterKey = "";
                   updateNodes("key", filterKey);
@@ -3308,7 +3268,7 @@
                   filterKey = "acquired";
                   updateNodes("key", filterKey);
                 }
-              });
+              });*/
   
             keyOther
               .append("circle")
@@ -3322,6 +3282,14 @@
               })
               .on("mouseout", keyMouseOut)
               .on("click", function(d) {
+                if (filterOther.indexOf(d) < 0) {
+                  filterOther.push(d)             
+                } else {
+                  filterOther = removeFromList(d, filterOther)
+                }
+                updateNodesbyOther()
+              });
+              /*.on("click", function(d) {
                 if (filterKey === d) {
                   filterKey = "";
                   updateNodes("key", filterKey);
@@ -3329,7 +3297,7 @@
                   filterKey = d;
                   updateNodes("key", filterKey);
                 }
-              });
+              });*/
   
             keyOther
               .append("text")
@@ -3344,6 +3312,14 @@
               })
               .on("mouseout", keyMouseOut)
               .on("click", function(d) {
+                if (filterOther.indexOf(d) < 0) {
+                  filterOther.push(d)             
+                } else {
+                  filterOther = removeFromList(d, filterOther)
+                }
+                updateNodesbyOther()
+              });
+              /*.on("click", function(d) {
                 if (filterKey === d) {
                   filterKey = "";
                   updateNodes("key", filterKey);
@@ -3351,7 +3327,7 @@
                   filterKey = d;
                   updateNodes("key", filterKey);
                 }
-              });
+              });*/
   
             keyActivity = keySVG
               .append("g")
@@ -3460,7 +3436,7 @@
             var keyTitle = keySVG
               .append("text")
               .attr("class", "key-title")
-              .text("Funding Key:")
+              .text("Funding Stage Filter:")
               .attr("y", -120)
               .attr("x", -85);
   
@@ -4003,6 +3979,37 @@
               return filteredItems
             }
 
+            
+
+            function updateNodesbyOther() {
+              keySVG.selectAll(".key-item-other").style("opacity", function(d) {
+                if (filterOther.indexOf(d) >= 0) {
+                  return 1
+                } else {
+                  return 0.3
+                }
+              })    
+              nodes.attr("opacity", function(v) {
+                if (filterOther.indexOf(fundingCategoryScale(v["Funding Stage"])) >= 0) {
+                  v.opacity = 1
+                } else {
+                  v.opacity = 0.3
+                }
+                return v.opacity
+              });
+              nodes_acquired.attr("opacity", function(d) {
+                if (d["Funding Stage"] == "Acquired" && filterOther.indexOf("Acquired") >= 0) {
+                  d.opacity = 1
+                } else {
+                  if (d["Funding Stage"] == "Acquired" && filterOther.indexOf("Acquired") < 0) {
+                    d.opacity = 0.3
+                  }
+                }
+                return d.opacity;
+              });
+       
+            }
+
             function updateNodesbyRegion() {
               keySVG.selectAll(".key-item-region").style("opacity", function(d) {
                 if (filterRegions.indexOf(d) >= 0) {
@@ -4134,13 +4141,7 @@
                   }
                   return d.opacity;
                 });
-  
-                nodes_activity.attr("opacity", function(d) {
-                  if (d["Activity/Acquisition Time"] != "") {
-                    d.opacity = 0.3;
-                  }
-                  return d.opacity;
-                });
+
   
                 keyOther.attr("opacity", function(d) {
                   if (d === filterKey) {
@@ -5170,7 +5171,6 @@
             }
   
             function hoverInfoFunction(segment_data, clicked = "") {
-              console.log(segment_data)
               var segmentDesc;
   
               desc.forEach(function(v) {
@@ -5514,7 +5514,7 @@
                 y = y + padding;
               }
 
-              nodes.attr("opacity", function(v) {
+              /*nodes.attr("opacity", function(v) {
                 if (v["Funding Stage"] === d["Funding Stage"]) {
                   return 1;
                 } else {
@@ -5525,7 +5525,7 @@
                 nodes_acquired.attr("opacity", 1);
               } else {
                 nodes_acquired.attr("opacity", 0.3);
-              }
+              }*/
 
               d3.select(".node-tooltip").style("transform", `translate(${x}px,${y}px)`);
             }
@@ -6312,7 +6312,7 @@
           return result;
         }
   
-        function label_wrap(text_data, limit = 7) {
+        function label_wrap(text_data, limit = 20) {
           words = text_data.split(/\s+/);
           lines = [];
           current_seq_len = 0;
