@@ -15,8 +15,8 @@
     <style type="text/css">
       body {
         display: grid;
-        grid-template-columns: 146px 800px 160px 200px;
-        grid-template-rows: 300px 120px 400px;
+        grid-template-columns: 146px 800px 200px 200px;
+        grid-template-rows: 200px 280px 340px;
         grid-gap: 0.1em;
         margin: auto;
       }
@@ -93,7 +93,7 @@
         fill: white;
         text-anchor: middle;
         font-weight: bold;
-        font-size: 6px;
+        font-size: 10px;
         font-family: "Graphik Bold";
       }
 
@@ -202,6 +202,12 @@
       }
 
       .key-item-other {
+        stroke: black;
+        stroke-width: 1px;
+        cursor: pointer;
+      }
+
+      .key-item-region {
         stroke: black;
         stroke-width: 1px;
         cursor: pointer;
@@ -436,7 +442,7 @@
         top: 50%;
         width: 120px;
         height: 36px;
-        margin: 0px auto 0 auto;
+        /*margin: 0px auto 0 auto;*/
         overflow: hidden;
       }
 
@@ -1419,8 +1425,8 @@
           keySpacing = 10,
           radial = "maturity",
           animationDuration = 2000,
-          keyWidth = 160,
-          keyHeight = 260,
+          keyWidth = 200,
+          keyHeight = 280,
           filter = 0,
           filterKey = "",
           industryFilter = "All Startups",
@@ -1552,7 +1558,7 @@
           .attr("x", -titleLogoWidth / 2); 
   
         d3.csv(
-          "EduardoData - TradeTransportV2.csv"
+          "Compass Source Sheet (Decarb Sep 2020) - Compass.csv"
         ).then(function(data) {
           d3.csv(
             "EduardoData - TradeTransportV2-Definitions.csv"
@@ -1563,7 +1569,7 @@
 
               spinner.stop();
               d3.select("#button-16").style("display", "block")
-              d3.select(".dropdown-industry").style("display", "inline-block")
+              //d3.select(".dropdown-industry").style("display", "inline-block")
               d3.select("#save-button").style("display", "block")
               d3.select(".chart-title").style("display", "")
 
@@ -1579,9 +1585,14 @@
                 return d["Theme"]
               }))]
 
+              console.log('data', data)
+
               // Filter data for startups noot in description:
               new_data = []
               data.forEach(function(d) {
+                if (d["Region"] == "") {
+                  d["Region"] = "Unknown"
+                }
                 d["Opportunity Space"] = d["Opportunity Space"].toLowerCase()
                 if (d["Opportunity Space"] === "") {
                   console.log('ERROR, blank Opportunity Space Entry:', d)
@@ -2576,17 +2587,6 @@
               })
               .entries(data);
   
-            var count_by_industry = d3
-              .nest()
-              .key(function(d) {
-                return d["Industry"];
-              })
-              .sortKeys(d3.ascending)
-              .rollup(function(v) {
-                return v.length;
-              })
-              .entries(data);
-  
             var count_by_funding_stage = d3
               .nest()
               .key(function(d) {
@@ -2607,6 +2607,23 @@
                 return v.length;
               })
               .entries(data);
+
+              var count_by_region = d3
+              .nest()
+              .key(function(d) {
+                return d["Region"];
+              })
+              .sortKeys(d3.ascending)
+              .entries(data);
+
+              filterRegions = count_by_region.map(function(v) {
+                return v.key
+              })
+
+  
+
+
+
   
             var yearList = [];
             count_by_year.forEach(function(d, i) {
@@ -2736,7 +2753,7 @@
               "All Startups"
             ];
 
-            count_by_industry.forEach(function(v) {
+            /*count_by_industry.forEach(function(v) {
               if (v.key != "") {
                 industryList.push(v.key)
               }
@@ -2754,7 +2771,7 @@
               .on("click", function(d) {
                 update_opacity(d);
                 industryFilter = d;
-              });
+              });*/
 
             // Bar Chart:
             barChartList = ["Amount of Funding", "Founded Year", "Maturity"]
@@ -3023,7 +3040,7 @@
                 .attr("dy", function(d, i) {
                   if (d.percentage >= 25 && d.percentage <= 75) {
                     if (d.lineLength === 1) {
-                      return "-1.9em";
+                      return "-1.2em";
                     } else {
                       if (i === 0) {
                         return "-2.6em";
@@ -3033,7 +3050,7 @@
                     }
                   } else {
                     if (d.lineLength === 1) {
-                      return "2.7em";
+                      return "1.9em";
                     } else {
                       if (i === 0) {
                         return "2.1em";
@@ -3167,6 +3184,69 @@
               .text(function(d) {
                 return d.data.value.key.toUpperCase();
               }); */
+
+            var keyRegionTitle = keySVG
+              .append("text")
+              .attr("class", "key-title")
+              .text("Region Key:")
+              .attr("y", -10)
+              .attr("x", -85);
+
+            var keyRegion = keySVG
+              .selectAll("g.key-region")
+              .data(count_by_region.map(function(v) {
+                return v.key
+              }))
+              .enter()
+              .append("g")
+              .attr("transform", function(d, i) {
+                var h = keySize + keySpacing;
+                var offset = 0;
+                var horz = -75;
+                var vert = i * h - offset + 10;
+                return "translate(" + horz + "," + vert + ")";
+              });
+
+            keyRegion
+              .append("circle")
+              .classed("key-item-region", true)
+              .attr("r", 4.4)
+              .attr("fill", function(d) {
+                return "#82ADBD"
+              })
+              .on("mouseover", function(d) {
+                keyMouseOver(d, "region");
+              })
+              .on("mouseout", keyMouseOut)
+              .on("click", function(d) {
+                if (filterRegions.indexOf(d) < 0) {
+                  filterRegions.push(d)             
+                } else {
+                  filterRegions = removeFromList(d, filterRegions)
+                }
+                updateNodesbyRegion()
+              });
+  
+            keyRegion
+              .append("text")
+              .text(function(d) {
+                return d;
+              })
+              .classed("key-labels key-label", true)
+              .attr("dx", "1.8em")
+              .attr("dy", "0.35em")
+              .on("mouseover", function(d) {
+                keyMouseOver(d, "region");
+              })
+              .on("mouseout", keyMouseOut)
+              .on("click", function(d) {
+                if (filterRegions.indexOf(d) < 0) {
+                  filterRegions.push(d)             
+                } else {
+                  filterRegions = removeFromList(d, filterRegions)
+                }
+                updateNodesbyRegion()
+              });
   
 
   
@@ -3178,14 +3258,14 @@
               .attr("transform", function(d, i) {
                 var h = keySize + keySpacing;
                 var offset = 0;
-                var horz = -50;
-                var vert = i * h - offset - 90;
+                var horz = -75;
+                var vert = i * h - offset - 100;
                 return "translate(" + horz + "," + vert + ")";
               });
   
             var keyAcquired = keySVG
               .append("g")
-              .attr("transform", "translate(-45,-30)");
+              .attr("transform", "translate(-69,-40)");
   
             keyAcquired
               .append("rect")
@@ -3381,8 +3461,8 @@
               .append("text")
               .attr("class", "key-title")
               .text("Funding Key:")
-              .attr("y", -110)
-              .attr("x", -60);
+              .attr("y", -120)
+              .attr("x", -85);
   
             /* var switchBtn = svg
                 .append("rect")
@@ -3916,6 +3996,40 @@
                 });
                 nodes_acquired.attr("opacity", 0.3);
               } */
+
+            function removeFromList(source_item, source_list) {
+              const i = source_list.indexOf(source_item)
+              const filteredItems = source_list.slice(0, i).concat(source_list.slice(i + 1, source_list.length))
+              return filteredItems
+            }
+
+            function updateNodesbyRegion() {
+              keySVG.selectAll(".key-item-region").style("opacity", function(d) {
+                if (filterRegions.indexOf(d) >= 0) {
+                  return 1
+                } else {
+                  return 0.3
+                }
+              })
+              nodes.style("display", function(d) {
+                if (filterRegions.indexOf(d["Region"]) >= 0) {
+                  return "block"
+                } else {
+                  return "none"
+                }
+                
+              });
+
+              nodes_acquired.style("display", function(d) {
+                if (filterRegions.indexOf(d["Region"]) >= 0) {
+                  return "block"
+                } else {
+                  return "none"
+                }
+                
+              });
+
+            }
   
             function updateNodes(type, filterKey) {
               if (filterKey === "") {
@@ -5251,6 +5365,22 @@
                 nodes_acquired.attr("opacity", 1);
                 nodes.attr("opacity", 0.3);
                 nodes_activity.attr("opacity", 0.3);
+              }
+              if (type == "region") {
+                nodes.attr("opacity", function(d) {
+                  if ((d["Region"]) === data) {
+                    return 1;
+                  } else {
+                    return 0.3;
+                  }
+                });
+                nodes_acquired.attr("opacity", function(d) {
+                  if ((d["Region"]) === data) {
+                    return 1;
+                  } else {
+                    return 0.3;
+                  }
+                });       
               }
               /* if (type === "size") {
                   nodes.attr("opacity", function(d) {
