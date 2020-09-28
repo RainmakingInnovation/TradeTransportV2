@@ -21,6 +21,14 @@
         margin: auto;
       }
 
+      .summary-section {
+    grid-column: 2 / span 2;
+    grid-row: 1 / span 3;
+        padding: 5px;
+        z-index: 99;
+        display: none;
+      }
+
       #chart-container {
         grid-column: 2 / span 1;
         grid-row: 1 / span 2;
@@ -93,7 +101,7 @@
         fill: white;
         text-anchor: middle;
         font-weight: bold;
-        font-size: 10px;
+        font-size: 6px;
         font-family: "Graphik Bold";
       }
 
@@ -109,7 +117,7 @@
         fill: white;
         text-anchor: middle;
         font-weight: bold;
-        font-size: 10px;
+        font-size: 6px;
         font-family: "Graphik Bold";
       }
 
@@ -682,6 +690,7 @@
             vertical-align: middle;
             text-align: center;
             text-anchor: middle;
+            z-index: 100;
       }
 
       .left-sidebar-header {
@@ -1013,7 +1022,7 @@
 
   .popup-section-b {
     padding: 10px;
-    margin: 20px;
+    margin: 10px;
     margin-bottom: 10px;
     height: 70vh;
   }
@@ -1022,9 +1031,27 @@
     font-size: 30px;
     color: #36363c;
     font-family: "Graphik Bold";
-    margin-bottom: 20px;
+    margin-bottom: 10px;
   }
 
+  .bar-chart-type-title {
+    font-size: 20px;
+    color: #36363c;
+    font-family: "Graphik Bold";
+  }
+
+  .dropbtn-alt {
+    background-color: #787878;
+    color: white;
+    padding: 10px;
+    font-family: "Graphik Regular";
+    font-weight: bold;
+    font-size: 10px;
+    border: none;
+    cursor: pointer;
+    min-width: 360px;
+    text-anchor: middle; 
+  }
   .dropbtn-b {
     background-color: #787878;
     color: white;
@@ -1039,6 +1066,13 @@
   }
 
   /* The container <div> - needed to position the dropdown content */
+  .dropdown-summary {
+    position: relative;
+    display: inline-block;
+    text-anchor: middle;
+    margin-bottom: 10px;
+    margin-left: 100px;
+  }
   .dropdown-bar-chart {
     position: relative;
     display: inline-block;
@@ -1046,7 +1080,19 @@
     margin-bottom: 10px;
   }
 
+
+
   /* Dropdown Content (Hidden by Default) */
+  .dropdown-content-alt {
+    display: none;
+    position: absolute;
+    background-color: #f1f1f1;
+    min-width: 360px;
+    z-index: 1;
+    max-height: 530px;
+    overflow: auto;
+    text-anchor: middle; 
+  }
   .dropdown-bar-content {
     display: none;
     position: absolute;
@@ -1059,6 +1105,7 @@
   }
 
   /* Links inside the dropdown */
+  .dropdown-content-alt a,
   .dropdown-bar-content a {
     color: #404e4d;
     font-size: 10px;
@@ -1072,16 +1119,19 @@
   }
 
   /* Change color of dropdown links on hover */
+  .dropdown-content-alt a:hover,
   .dropdown-bar-content a:hover {
     background-color: #ddd;
   }
 
   /* Show the dropdown menu on hover */
+  .dropdown-summary:hover .dropdown-content-alt,
   .dropdown-bar-chart:hover .dropdown-bar-content {
     display: block;
   }
 
   /* Change the background color of the dropdown button when the dropdown content is shown */
+  .dropdown-summary:hover .dropbtn-alt,
   .dropdown-bar-chart:hover .dropbtn-b {
     background-color: #132A54;
   }
@@ -1180,6 +1230,12 @@
   .bold {
     font-family: "Graphik Bold";
     padding-top: 5px;
+  }
+
+  .summary-title {
+    margin-left: 100px;
+    margin-top: 50px;
+    font-family: "Graphik Bold";
   }
 
     </style>
@@ -1330,8 +1386,9 @@
                     <i class="arrow down"> </i> Select Data
                   </button>
                   <div class="dropdown-bar-content" id="bar-chart-selector"></div>
-                </div>
-                <div class="svg-bar-container"></div>
+              </div>
+              <div class="bar-chart-type-title">Test - Test</div>
+              <div class="svg-bar-container"></div>
           </div>
           <div class='analysis-btn'>
             <i class="fas fa-chevron-circle-down"></i>
@@ -1352,9 +1409,12 @@
         
         </div>
         <div id="map-toggle-btn" class="left-sidebar-btn">
-        <div class="left-sidebar-btn-label">Map</div>
-        <i class="far fa-map fa-lg"></i>
-        
+          <div class="left-sidebar-btn-label">Map</div>
+          <i class="far fa-map fa-lg"></i>
+        </div>
+        <div id="summary-toggle-btn" class="left-sidebar-btn">
+          <div class="left-sidebar-btn-label">Summary</div>
+          <i class="fas fa-chart-line fa-lg"></i>
         </div>
       </div>
     </div>
@@ -1384,6 +1444,16 @@
   <div id="map"></div>
 
 </div>
+    <div class="summary-section">
+      <div class="summary-title">title</div>
+       <div class="dropdown-summary">
+          <button class="dropbtn-alt">
+            <i class="arrow down"></i> Select Bar Type
+          </button>
+          <div class="dropdown-content-alt" id="summary-selector"></div>
+      </div>
+      <div class="summary-chart-container"></div>
+    </div>
     <div id="chart-container"></div>
     <div id="control-container">
       <div>
@@ -1442,11 +1512,13 @@
           popupMode = {"page": "none", "type": "none"},
           indexTracker = {},
           indexTrackerYear = {};
+          bar_chart_type = {'type': 'Amount of Funding', 'source': ''}
+          summary = {'base': 'Number', 'first': 'Theme', 'second': 'Funding Stage'}
 
     var categoryFontObject = [
       { name: 'themeFont',
-        dy_upper: "-1.15em",
-        dy_lower: "1.85em"
+        dy_upper: "-2.15em",
+        dy_lower: "2.95em"
       },
       {
         fontSize: "30px",
@@ -1567,6 +1639,17 @@
             d3.csv("EduardoData - TradeTransportV2-HeroStartups.csv"
             ).then(function(hero_data) { 
 
+              var check = d3.nest()
+                .key(function(d) {
+                  return d['Theme']
+                })
+                .key(function(d) {
+                  return d['Opportunity Space']
+                })
+                .entries(data)
+
+                console.log(check)
+
               spinner.stop();
               d3.select("#button-16").style("display", "block")
               //d3.select(".dropdown-industry").style("display", "inline-block")
@@ -1577,15 +1660,7 @@
 
               
 
-              var focusAreaOrder = desc.map(function(d) {
-                return d["Opportunity Space"].toLowerCase()
-              });
 
-              var themeOrder = [... new Set(desc.map(function(d) {
-                return d["Theme"]
-              }))]
-
-              console.log('data', data)
 
               // Filter data for startups noot in description:
               new_data = []
@@ -1597,20 +1672,14 @@
                 if (d["Opportunity Space"] === "") {
                   //console.log('ERROR, blank Opportunity Space Entry:', d)
                 }
-                if (d["YearFounded"] === "") {
+                if (d["Year Founded"] === "") {
                   //console.log('ERROR, blank Founded Entry:', d)
                 }
                 if (d["Maturity"] === "") {
                   //console.log('ERROR, blank Maturity Entry:', d)
                 }
-                if (focusAreaOrder.indexOf(d["Opportunity Space"]) < 0) {
-                  //console.log('ERROR, bad Opportunity Space Entry:', d)
-                } else {
-                  new_data.push(d)
-                }
-              })
 
-              data = new_data
+              })
 
             data = data.filter(function(d) {
               return d["Opportunity Space"] !== "";
@@ -1624,13 +1693,25 @@
               return d["Maturity"] !== "";
             });
 
+              var focusAreaOrder = []
+              var themeOrder = []
+              check.forEach(function(d) {
+                themeOrder.push(d.key)
+                d.values.forEach(function(v) {
+                  focusAreaOrder.push(v.key.toLowerCase())
+                })
+              })
 
+              console.log('check', check)
+              console.log('themeOrder', themeOrder)
+              console.log('focusAreaOrder', focusAreaOrder)
             
               json.features.push({"type": "features", "properties": {"name": "Singapore"}, "geometry": {"type": "Polygon", "coordinates": [[0, 0]]}})
               json.features.push({"type": "features", "properties": {"name": "Bahrain"}, "geometry": {"type": "Polygon", "coordinates": [[0, 0]]}})
   
               d3.select("#radar-toggle-btn").on("click", function() {
                 d3.select("#map-toggle-btn").attr("class", "left-sidebar-btn")
+                d3.select("#summary-toggle-btn").attr("class", "left-sidebar-btn")
                 d3.select("#radar-toggle-btn").attr("class", "left-sidebar-btn active")
                 d3.select("body").style("background-color", "white")
                 toggle_map("off");
@@ -2226,8 +2307,10 @@
                             'Year Founded': w["Year Founded"]
                           };
                           bar_data.push(obj);
+                          bar_chart_type.source = d.properties.name
                     }
                 })
+                
                 update_bar("Amount of Funding")
 
               }
@@ -2332,8 +2415,7 @@
   
   
 
-  
-  
+
             // correct formatting of total funding values to numbers
             data.forEach(function(d) {
               if (d["Total funding (US$)"] == "" || d["Total funding (US$)"] === "Unfunded" || d["Total funding (US$)"] === "Funded") {
@@ -2344,6 +2426,8 @@
               d["Opportunity Space"] = d["Opportunity Space"]
                 .toLowerCase()
                 .replace(/\//g, "_");
+
+
   
               desc.forEach(function(v) {
                 if (
@@ -2356,18 +2440,7 @@
                 }
               });
             });
-  
-            /* var oppSpace_order = [
-                "end of life care",
-                "connected health",
-                "non-invasive diagnostics",
-                "chronic disease management",
-                "growing wealth management",
-                "will & succession planning",
-                "smart agency"
-              ];
-  
-              */
+
 
               function focusAreaSort(a, b) {
                 var valA = focusAreaOrder.indexOf(a.replace(/_/g, "/"))
@@ -2671,6 +2744,7 @@
   
             var chartPieData = chartPie(d3.entries(focusAreaSorted));
   
+            console.log(chartPieData)
             var yearSegmentColorScale = d3
               .scaleOrdinal()
               .domain(yearList)
@@ -2691,29 +2765,30 @@
                   "#7A7A7A"
                 ]); */
   
-            industryList = [
-              "All Startups"
+            summaryList = [
+              {'name':"Number of Startups - Grouped by Theme - Stacked by Funding Stage", 'base': 'Number', 'first': 'Theme', 'second': 'Funding Stage'},
+              {'name':"Number of Startups - Grouped by Theme - Stacked by Region", 'base': 'Number', 'first': 'Theme', 'second': 'Region'},
+              {'name':"Number of Startups - Grouped by Region - Stacked by Funding Stage", 'base': 'Number', 'first': 'Region', 'second': 'Funding Stage'},
+              {'name': "Total Funding - Grouped by Theme - Stacked by Funding Stage", 'base': 'Funding', 'first': 'Theme', 'second': 'Funding Stage'},
+              {'name': "Total Funding - Grouped by Theme - Stacked by Region", 'base': 'Funding', 'first': "Theme", 'second': 'Region'},
+              {'name': "Total Funding - Grouped by Region - Stacked by Funding Stage", 'base': 'Funding', 'first': 'Region', 'second': 'Funding Stage'}
             ];
-
-            /*count_by_industry.forEach(function(v) {
-              if (v.key != "") {
-                industryList.push(v.key)
-              }
-            })
   
-            var industrySelector = d3
-              .select("#industry-selector")
+            d3
+              .select("#summary-selector")
               .selectAll("a")
-              .data(industryList)
+              .data(summaryList)
               .enter()
               .append("text")
               .html(function(d) {
-                return "<a href='#'>" + d + "</a>";
+                return "<a href='#'>" + d.name + "</a>";
               })
               .on("click", function(d) {
-                update_opacity(d);
-                industryFilter = d;
-              });*/
+                summary.base = d.base
+                summary.first = d.first
+                summary.second = d.second
+                update_summary();
+              });
 
             // Bar Chart:
             barChartList = ["Amount of Funding", "Founded Year", "Maturity"]
@@ -2730,6 +2805,8 @@
             .on("click", function(d) {
               update_bar(d)
             });
+
+            update_summary()
 
             themeFontData = categoryFontObject[0];
   
@@ -2946,6 +3023,7 @@
                 }
               })
               .on("click", function(d) {
+                  bar_chart_type.source = capitalize_sentence(d.data.value.key.replace(/_/g," "))
                   update_popup(d)
 
                 /* if (filterKey === d.data.value.key) {
@@ -2981,7 +3059,7 @@
                 .attr("dy", function(d, i) {
                   if (d.percentage >= 25 && d.percentage <= 75) {
                     if (d.lineLength === 1) {
-                      return "-1.0em";
+                      return "-1.9em";
                     } else {
                       if (i === 0) {
                         return "-2.6em";
@@ -2991,7 +3069,7 @@
                     }
                   } else {
                     if (d.lineLength === 1) {
-                      return "1.8em";
+                      return "2.7em";
                     } else {
                       if (i === 0) {
                         return "2.1em";
@@ -4551,8 +4629,211 @@
                 });
             }
 
+            function updateBarTitle() {
+              var title = bar_chart_type.type + " - " + bar_chart_type.source
+              d3.select(".bar-chart-type-title").text(title)
+            }
+
+            function update_summary() {
+              var margin = {top: 50, right: 100, bottom: 100, left: 100}
+              var bar_width = 900
+              var bar_height = 660
+              var colors_summary = [
+                                    "#69DD85",
+                                    "#FEDD33",
+                                    "#4ABBFC",
+                                    "#000000",
+                                    "#F2F2F2",
+                                    "#FFFFFF",
+                                    "#2C4251",
+                                    "#007693",
+                                    "#3A5A40",
+                                    "#a4517b",
+                                    "#d75a3b",
+                                    "#FABC3C",
+                                    "#fffad9",
+                                    "#4cb8d5",
+                                    "#7BC950",
+                                    "#2C4251",
+                                    "#007693",
+                                    "#3A5A40",
+                                  ]
+
+              // delete bars
+              d3.select(".summary-chart-container").html("")
+
+              // process data
+              var summary_data = d3.nest()
+                .key(function(u) {
+                  return u[summary.first]
+                })
+                .sortKeys(function(a, b) {
+                  return d3.ascending(a, b)
+                })
+                .key(function(u) {
+                  return u[summary.second]
+                })
+                .sortKeys(function(a, b) {
+                  return d3.ascending(a, b)
+                })
+                .entries(data)
+
+              console.log('summary_data', summary_data)
+
+              var barSVG = d3.select(".summary-chart-container")
+                .append("svg")
+                .attr("width", bar_width)
+                .attr("height", bar_height)
+                .append("g")
+                .attr("transform", "translate(" + (margin.left) + "," + margin.top + ")");
+
+              var maxVal
+              if (summary.base == "Number" && summary.first == "Theme" && summary.second == "Funding Stage") {
+                var title = "Number of Startups" + " - " + "Grouped by Theme" + " - " + "Stacked by Funding Stage"
+                d3.select(".summary-title").text(title)
+                  maxVal = d3.max(summary_data, function(d) {
+                    return d3.sum(d.values, function(v) {
+                      return v.values.length
+                    })
+                  })
+              }
+              if (summary.base == "Number" && summary.first == "Theme" && summary.second == "Region") {
+                var title = "Number of Startups" + " - " + "Grouped by Theme" + " - " + "Stacked by Region"
+                d3.select(".summary-title").text(title)
+                  maxVal = d3.max(summary_data, function(d) {
+                    return d3.sum(d.values, function(v) {
+                      return v.values.length
+                    })
+                  })
+              }
+              if (summary.base == "Number" && summary.first == "Region" && summary.second == "Funding Stage") {
+                var title = "Number of Startups" + " - " + "Grouped by Region" + " - " + "Stacked by Funding Stage"
+                d3.select(".summary-title").text(title)
+                  maxVal = d3.max(summary_data, function(d) {
+                    return d3.sum(d.values, function(v) {
+                      return v.values.length
+                    })
+                  })
+              }
+              if (summary.base == "Funding" && summary.first == "Theme" && summary.second == "Funding Stage") {
+                var title = "Total Funding" + " - " + "Grouped by Theme" + " - " + "Stacked by Funding Stage"
+                d3.select(".summary-title").text(title)
+                  maxVal = d3.max(summary_data, function(d) {
+                    return d3.sum(d.values, function(v) {
+                      return d3.sum(v.values, function(u) {
+                        return +u["Total funding (US$)"]
+                      })
+                    })
+                  })
+              }
+              if (summary.base == "Funding" && summary.first == "Theme" && summary.second == "Region") {
+                var title = "Total Funding" + " - " + "Grouped by Theme" + " - " + "Stacked by Region"
+                d3.select(".summary-title").text(title)
+                  maxVal = d3.max(summary_data, function(d) {
+                    return d3.sum(d.values, function(v) {
+                      return d3.sum(v.values, function(u) {
+                        return +u["Total funding (US$)"]
+                      })
+                    })
+                  })
+              }
+              if (summary.base == "Funding" && summary.first == "Region" && summary.second == "Funding Stage") {
+                var title = "Total Funding" + " - " + "Grouped by Region" + " - " + "Stacked by Funding Stage"
+                d3.select(".summary-title").text(title)
+                  maxVal = d3.max(summary_data, function(d) {
+                    return d3.sum(d.values, function(v) {
+                      return d3.sum(v.values, function(u) {
+                        return +u["Total funding (US$)"]
+                      })
+                    })
+                  })
+              }
+              var x = d3.scaleBand()
+                .domain(summary_data.map(function(d) {
+                    return d.key
+                }))
+                .range([50, bar_width-margin.right-margin.left])
+                .paddingInner(0.25);
+
+              var y = d3.scaleLinear()
+                .range([bar_height-100, 0])
+                .domain([0, maxVal]);
+
+              color_domain = []
+              summary_data.forEach(function(v) {
+                v.values.forEach(function(u) {
+                  if (color_domain.indexOf(u.key) < 0) {
+                    color_domain.push(u.key)
+                  }
+                })
+              })
+
+              const colorScale = d3
+                .scaleOrdinal()
+                .domain(color_domain)
+                .range(colors_summary);
+
+              console.log(colorScale.domain())
+
+
+              barSVG.append("g")
+                .attr("transform", "translate(50,0)")
+                .call(d3.axisLeft(y));
+
+              var bars_g = barSVG
+                .selectAll(".stacks")
+                .data(summary_data)
+                .enter()
+                .append("g")
+                .attr("class", "stacks")
+                .attr("transform", function(d, i) {
+                  var vert = 0
+                  var horz = x(d.key)
+                  return "translate(" + horz + "," + vert + ")";
+                })
+
+              bars_g
+                .selectAll(".stack-bar")
+                .data(function(d) {
+                  var prev_value = 0;
+                  d.values.forEach(function(v) {
+                    v.parentKey = d.key;
+                    v.prev_value = prev_value;
+                    if (summary.base == "Number") {
+                      v.current_value = v.values.length
+                    } else {
+                       v.current_value = d3.sum(v.values, function(v) {
+                          return v["Total funding (US$)"]
+                      })
+                    }
+                    prev_value += v.current_value
+                  })
+                  return d.values
+                })
+                .enter()
+                .append("rect")
+                .attr("class","stack-bar")
+                .attr("width", x.bandwidth())
+                .attr("height", function(v, i) {
+                    return y(0) - y(v.current_value)
+                })
+                .attr("y", function(v, i) {
+                  return y(v.current_value) - y(0) + y(v.prev_value)
+                })
+                .attr("fill", function(d) {
+                  return colorScale(d.key)
+                })
+                .attr("x", 0)
+                
+
+
+              // draw bars
+            }
+
             function update_bar(type) {
                 var margin = {top: 20, right: 20, bottom: 30, left: 40}
+                bar_chart_type.type = type
+                updateBarTitle()
                 d3.select(".svg-bar-container").html("")
                 d3.select(".dropbtn-b").html("<i class='arrow down'> <\/i> " + type)
 
@@ -5228,7 +5509,7 @@
                     "<tspan x=" +
                     x +
                     " dy='1.1em' class='funding-hover-info title'>" +
-                    capitalize_sentence(segment_data.data.value.key) +
+                    c(segment_data.data.value.key) +
                     "</tspan>";
                   lineDesc =
                     "<tspan x=" +
@@ -6115,9 +6396,27 @@
             d3.select("#map-toggle-btn").on("click", function() {
                 d3.select("#map-toggle-btn").attr("class", "left-sidebar-btn active")
                 d3.select("#radar-toggle-btn").attr("class", "left-sidebar-btn")
+                d3.select("#summary-toggle-btn").attr("class", "left-sidebar-btn")
                 d3.select("body").style("background-color", "#CBCBCB")
 
               toggle_map("on")
+            })
+
+            d3.select("#summary-toggle-btn").on("click", function() {
+                d3.select("#map-toggle-btn").attr("class", "left-sidebar-btn")
+                d3.select("#radar-toggle-btn").attr("class", "left-sidebar-btn")
+                d3.select("#summary-toggle-btn").attr("class", "left-sidebar-btn active")
+                d3.select("body").style("background-color", "#fff") 
+
+                d3.select(".map-container").style("display", "none")
+                d3.select(".map-tooltip").style("display", "none");
+                d3.select("#chart-container").style("display", "none")
+                d3.select("#key-container").style("display", "none")
+                d3.select("#control-container").style("display", "none")
+                d3.select("#hover-info-container").style("display", "none")
+                d3.select("#save-button-container").style("display", "")
+
+                d3.select(".summary-section").style("display", "block")    
             })
   
             // Set-up the export button
