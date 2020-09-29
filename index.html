@@ -196,12 +196,18 @@
         font-size: 28px;
       }
 
+      .legend-label,
       .key-label {
         font-family: "Graphik Regular";
         font-size: 10px;
         cursor: pointer;
       }
 
+      
+      .legend-item {
+                stroke: black;
+        stroke-width: 1px;
+      }
       .key-item {
         stroke: black;
         stroke-width: 1px;
@@ -1867,15 +1873,8 @@
                           }
 
                           if (i == 1) {
-                            ver -= 50
                           }
-                          if (i == 2) {
-                            ver += 50
-                            hor -= 25
-                          }
-                          if (i == 4) {
-                            hor -= 50
-                          }
+ 
 
                           var tmp_chartSVG = tmp_svg
                           .append("g")
@@ -1978,85 +1977,91 @@
                     .classed("segment-band", true)
                     .attr("d", segmentLabelBandArc)
                     .attr("fill", "#82ADBD")
-  
-                  var tmpLabels = tmp_chartSVG
-                    .append("g")
-                    .classed("labels", true);
+                    .each(function(d, i) {
+                var firstArcSection = /(^.+?)L/;
+                var newArc = firstArcSection.exec(d3.select(this).attr("d"))[1];
+                d.newArc = newArc.replace(/,/g, " ");
+                d.percentage =
+                  ((d.endAngle - d.startAngle) / 2 + d.startAngle) / 0.0628319;
+                if (d.percentage >= 100) {
+                  d.percentage -= 100;
+                }
+                if (d.percentage >= 25 && d.percentage <= 75) {
+                  var startLoc = /M(.*?)A/;
+                  var middleLoc = /A(.*?)0 0 1/;
+                  var endLoc = /0 0 1 (.*?)$/;
+                  d.newStart = endLoc.exec(d.newArc)[1];
+                  d.newEnd = startLoc.exec(d.newArc)[1];
+                  d.middleSec = middleLoc.exec(d.newArc)[1];
+                  d.newArc =
+                    "M" + d.newStart + "A" + d.middleSec + "0 0 0 " + d.newEnd;
+                }
+                d.hiddenArc = tmp_chartSVG
+                  .append("path")
+                  .attr("class", "hiddenDonutArcs")
+                  .attr("id", function() {
+                    return (
+                      "hidden-opp-space-tmp-band-" + d.data.value.key.replace(/_/g," ")
+                    );
+                  })
+                  .attr("d", d.newArc)
+                  .style("fill", "none");
+              })
 
-                  var tmpLabelsOther = tmp_chartSVG
-                    .append("g")
-                    .classed("labels", true);
-  
-                  tmpLabels
-                    .append("def")
-                    .append("path")
-                    .attr("id", "label-path")
-                    .attr(
-                      "d",
-                      "m0 " +
-                        -labelRadius +
-                        " a" +
-                        labelRadius +
-                        " " +
-                        labelRadius +
-                        " 0 1,1 -0.01 0"
-                    );
-  
-                  tmpLabelsOther
-                    .append("def")
-                    .append("path")
-                    .attr("id", "label-other-path")
-                    .attr(
-                      "d",
-                      "m0 " +
-                        -labelOtherRadius +
-                        " a" +
-                        labelOtherRadius +
-                        " " +
-                        labelOtherRadius +
-                        " 0 1,1 -0.01 0"
-                    );
-  
-                  tmpLabels
-                    .selectAll("text")
-                    .data([chartPieData[i]])
-                    .enter()
-                    .append("text")
-                    .attr("class", "label-text")
-                    .append("textPath")
-                    .attr("xlink:href", "#label-path")
-                    .attr("startOffset", function(d, i) {
-                      var percentage =
-                        ((d.endAngle - d.startAngle) / 2 + d.startAngle) /
-                        0.0628319;
-                      return percentage + "%";
-                    })
-                    .text(function(d) {
-                      return label_wrap(d.data.value.key.toUpperCase())[0].replace(/_/g, " ")
-                    });
-  
-                  tmpLabelsOther
-                    .selectAll("text")
-                    .data([chartPieData[i]])
-                    .enter()
-                    .append("text")
-                    .attr("class", "label-text")
-                    .append("textPath")
-                    .attr("xlink:href", "#label-other-path")
-                    .attr("startOffset", function(d, i) {
-                      var percentage =
-                        ((d.endAngle - d.startAngle) / 2 + d.startAngle) /
-                        0.0628319;
-                      return percentage + "%";
-                    })
-                    .text(function(d) {
-                      var result = label_wrap(d.data.value.key.toUpperCase());
-                      if (result.length > 2) {
-                        return result[1] + " " + result[2];
+              var tmpOppSpaceLabels = tmp_chartSVG
+                .selectAll(".opp-space-label-text")
+                .data([chartPieData[i]])
+                .enter()
+                .append("g")
+                .selectAll(".test-class")
+                .data(function(d) {
+                  var limit = labelFontData.limit;
+
+                  return textWrap(
+                    d.data.value.key.toUpperCase().replace(/_/g," "),
+                    d.percentage,
+                    limit
+                  );
+                })
+                .enter()
+                .append("text")
+                .attr("class", "label opp-space-label-text")
+                .attr("dy", function(d, i) {
+                  if (d.percentage >= 25 && d.percentage <= 75) {
+                    if (d.lineLength === 1) {
+                      return "-2.0em";
+                    } else {
+                      if (i === 0) {
+                        return "-2.6em";
                       } else {
-                        return result[1];
+                        return "-1.4em";
                       }
-                    });
+                    }
+                  } else {
+                    if (d.lineLength === 1) {
+                      return "2.8em";
+                    } else {
+                      if (i === 0) {
+                        return "2.1em";
+                      } else {
+                        return "3.6em";
+                      }
+                    }
+                  }
+                })
+                .append("textPath")
+                .attr("xlink:href", function(d, i) {
+                  return (
+                    "#" +
+                    "hidden-opp-space-tmp-band-" +
+                    d.text_data.toLowerCase()
+                  );
+                })
+                .attr("startOffset", "50%")
+                .text(function(d) {
+                  return d.data
+                });
+  
 
                           var tmp_nodes = tmp_chartSVG
                           .selectAll("nodes")
@@ -4635,28 +4640,22 @@
             }
 
             function update_summary() {
-              var margin = {top: 50, right: 100, bottom: 100, left: 100}
-              var bar_width = 900
+              var margin = {top: 50, right: 300, bottom: 100, left: 100}
+              var bar_width = 1100
               var bar_height = 660
               var colors_summary = [
-                                    "#69DD85",
-                                    "#FEDD33",
-                                    "#4ABBFC",
-                                    "#000000",
-                                    "#F2F2F2",
-                                    "#FFFFFF",
-                                    "#2C4251",
-                                    "#007693",
-                                    "#3A5A40",
+                                    "#65BDED",
+                                    "#71D95B",
+                                    "#F6CC3B",
+                                    "#F2854A",
+                                    "#04724D",
+                                    "#E65CD6",
+                                    "#ADADAD",
+                                    "#EE6352",
+                                     // 
+                                    "#2E5077",
+                                    "#CA2E55",
                                     "#a4517b",
-                                    "#d75a3b",
-                                    "#FABC3C",
-                                    "#fffad9",
-                                    "#4cb8d5",
-                                    "#7BC950",
-                                    "#2C4251",
-                                    "#007693",
-                                    "#3A5A40",
                                   ]
 
               // delete bars
@@ -4780,6 +4779,27 @@
                 .attr("transform", "translate(50,0)")
                 .call(d3.axisLeft(y));
 
+              barSVG.append("g")
+                .attr("class", "summary-x-axis")
+                .attr("transform", "translate(0," + (bar_height-100) + ")")
+                .call(d3.axisBottom(x));
+
+              d3.select(".summary-x-axis")
+                .selectAll("text")
+                .text(function(d) {
+                  var limit = 30
+                  if (summary.first == "Region") {
+                    limit = 15
+                  }
+                  if (d.length < limit) {
+                    return d
+                  } else {
+                    a = d.substr(0, limit) + "..."
+                    return a
+                  }
+                  
+                })
+
               var bars_g = barSVG
                 .selectAll(".stacks")
                 .data(summary_data)
@@ -4827,7 +4847,44 @@
                 
 
 
-              // draw bars
+              // draw legend
+              var keyRegionTitle = barSVG
+              .append("text")
+              .attr("class", "key-title")
+              .text("Legend:")
+              .attr("y", -20)
+              .attr("x", 730);
+
+            var legend = barSVG
+              .selectAll("g.legend")
+              .data(color_domain)
+              .enter()
+              .append("g")
+              .attr("transform", function(d, i) {
+                var h = keySize + keySpacing;
+                var offset = 0;
+                var horz = 740;
+                var vert = i * h - offset
+                return "translate(" + horz + "," + vert + ")";
+              });
+
+            legend
+              .append("circle")
+              .classed("legend-item", true)
+              .attr("r", 4.4)
+              .attr("fill", function(d) {
+                return colorScale(d)
+              })
+  
+            legend
+              .append("text")
+              .text(function(d) {
+                return d;
+              })
+              .classed("legend-label", true)
+              .attr("dx", "1.8em")
+              .attr("dy", "0.35em")
+
             }
 
             function update_bar(type) {
@@ -4903,8 +4960,11 @@
                     .domain([0, maxVal])
 
                     var maxTicks = maxVal
-                    if (maxVal > 30) {
-                      maxTicks = maxVal / 2
+                    if (maxVal > 20) {
+                      maxTicks = maxVal / 4
+                    }
+                    if (maxVal > 100) {
+                      maxTicks = maxVal / 10
                     }
 
                     barSVG.append("g")
@@ -4955,20 +5015,20 @@
 
                 } 
                 if (type === "Founded Year") {
-
+                    console.log('bar_data', bar_data)
                     var yearHist = []
                     var years = []
                     bar_data.forEach(function(v) {
-                      if (years.indexOf(+v.Year) < 0) {
-                        var yearVal = +v.Year
+                      if (years.indexOf(+v['Year Founded']) < 0) {
+                        var yearVal = +v['Year Founded']
                         yearHist.push({'Year': yearVal, 'startups': 0})
-                        years.push(+v.Year)
+                        years.push(+v['Year Founded'])
                       } 
                     })
 
                     bar_data.forEach(function(v) {
                       yearHist.forEach(function(w) {
-                        if (+v.Year === w.Year) {
+                        if (+v['Year Founded'] === w['Year']) {
                           w.startups += 1
                         }
                       })
@@ -4986,6 +5046,8 @@
                     var maxVal = d3.max(yearHist, function(d) {
                       return d.startups
                   })
+
+                  console.log('yearHist', yearHist)
 
                   var x = d3.scaleBand()
                   .domain(yearHist.map(function(d) {
@@ -5154,7 +5216,7 @@
 
                 }
 
-                                if (type === "Maturity") {
+                if (type === "Maturity") {
                   var maturityOrder = [
                   "Existing", "Emerging", "Distant"]
                   function maturitySort(a, b) {
@@ -5205,6 +5267,9 @@
                 if (maxVal > 30) {
                   maxTicks = maxVal / 2
                 }
+                    if (maxVal > 100) {
+                      maxTicks = maxVal / 10
+                    }
 
                 barSVG.append("g")
                 .attr("transform", "translate(50,0)")
@@ -6376,6 +6441,7 @@
                     d3.select("#control-container").style("display", "none")
                     d3.select("#hover-info-container").style("display", "none")
                     d3.select("#save-button-container").style("display", "none")
+                    d3.select(".summary-section").style("display", "none")  
                 } else {
                   d3.select(".map-container").style("display", "none")
                   d3.select(".map-tooltip").style("display", "none");
@@ -6384,6 +6450,7 @@
                     d3.select("#control-container").style("display", "")
                     d3.select("#hover-info-container").style("display", "")
                     d3.select("#save-button-container").style("display", "")
+                    d3.select(".summary-section").style("display", "none")  
                 }
             }
 
